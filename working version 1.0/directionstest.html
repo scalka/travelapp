@@ -75,6 +75,7 @@
 
       <input type="radio" name="type" id="changemode-driving">
       <label for="changemode-driving">Driving</label>
+      <button id="reroute_btn">Reroute</button>
     </div>
 
     <div id="map"></div>
@@ -84,6 +85,22 @@
       // parameter when you first load the API. For example:
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
       function initMap() {
+      		var poliline;
+      		var loc = [
+								     [53.5451, -6.2638, "first", false],
+								     [53.356049, -6.328219, "sec", false],
+								     [53.334856, -6.261066, "thr", false],
+								     [53.293383, -6.249159, "4", false],
+								     [53.346718, -6.260881, "5", false],
+								     [53.280352, -6.152984, "6", false],
+								     [53.325859, -6.229656, "7", false],
+								     [53.325859, -6.229656, "8", false],
+								     [53.342139, -6.286251, "9", false],
+								     [53.298926, -6.132908, "11", false],
+                                    [53.286677, -6.191372, "12", false],
+                                    [53.286677, -6.201372, "13", false],
+								     [53.339913, -6.271316, "14", false]
+						];
 
       		var origin_place_id = null;
 	        var destination_place_id = null;
@@ -120,6 +137,11 @@
 		          radioButton.addEventListener('click', function() {
 		            travel_mode = mode;
 		          });
+		          var reroute_btn = document.getElementById("reroute_btn");
+		          reroute_btn.addEventListener('click', function(){
+		          	rerouteFunction();
+		          });
+		          
 	        }
 	        setupClickListener('changemode-walking', 'WALKING');
 	        setupClickListener('changemode-transit', 'TRANSIT');
@@ -165,9 +187,7 @@
 	        });
 
 	        function route(origin_place_id, destination_place_id, travel_mode,
-	                       directionsService, directionsDisplay) {
-	        	var poliline;
-	        	var markerlatlng = 	new google.maps.LatLng(53.3451, -6.2638);
+	                       directionsService, directionsDisplay) {      	
 
 		          if (!origin_place_id || !destination_place_id) {
 		            return;
@@ -178,20 +198,7 @@
 			            travelMode: travel_mode
 		          }, function(response, status) {
 		          	//db with locasions
-		          	var loc = [
-								     [53.5451, -6.2638],
-								     [53.356049, -6.328219],
-								     [53.334856, -6.261066],
-								     [53.293383, -6.249159],
-								     [53.346718, -6.260881],
-								     [53.280352, -6.152984],
-								     [53.325859, -6.229656],
-								     [53.325859, -6.229656],
-								     [53.342139, -6.286251],
-								     [53.298926, -6.132908],	
-								     [53.339913, -6.271316]
-								];
-		            if (status === 'OK') {
+		          	if (status === 'OK') {
 			              directionsDisplay.setDirections(response);
 			              //poliline from the JSON response array
 			              poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
@@ -204,7 +211,8 @@
 					          
 							  if (isLocationNear){
 							  	console.log("close");
-							  	locarray.push(markerlatlng);
+							  	locarray.push(loc[i]);
+							  	console.log(loc[i]);
 							  } else {
 							  	console.log("not near");
 							  }
@@ -215,16 +223,69 @@
 			        }
 		         	});        
       		}
+      		function rerouteFunction(){
+      			console.log("rerouting button clicked");
+      			 if (!origin_place_id || !destination_place_id) {
+		            return;
+		          }
+		          directionsService.route({
+			            origin: {'placeId': origin_place_id},
+			            destination: {'placeId': destination_place_id},
+			            travelMode: travel_mode
+		          }, function(response, status) {
+		          	//db with locasions
+		          	if (status === 'OK') {
+			              directionsDisplay.setDirections(response);
+			              console.log("status OK - rerouted");
+			        } else {
+			              window.alert('Directions request failed due to ' + status);
+			        }
+		         	});        
+      		}
+      		function addToRoute(){
+      				console.log("infowindow");
+      			}
       		//displaying markers near the poligon
       		function displayMarkers(locarray){
-      			var marker;
+      			var marker = [];
+      			var content;
+      			var infowindow;
+      			var latlongset;
+      		// TODO click button set flag for added to route 
 				for (var i=0; i < locarray.length; i++){
+					latlongset = new google.maps.LatLng(locarray[i][0], locarray[i][1]);
 					marker = new google.maps.Marker({
-						    position: locarray[i],
+						    position: latlongset,
 						    map: map,
+						    title: locarray[i][2]
 				 	});
-				}				
-      		}
+				 	marker.set("added", false);
+					content = "Marker no " + locarray[i][2];  
+					infowindow = new google.maps.InfoWindow();
+					google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
+					    return function() {
+					        infowindow.setContent(content + '<button type="button" id="addToRouteBtn">Click</button>');
+					        infowindow.open(map,marker);
+
+					        if (addToRouteBtn){
+								console.log("btn not null");
+								addToRouteBtn.addEventListener('click', function(){
+								addToRoute();
+								});	
+							} else {
+								console.log("btn null");
+							}
+
+					    };
+					})(marker,content,infowindow)); 
+
+					var addToRouteBtn = document.getElementById("addToRouteBtn");	        
+
+				} // closing for loop
+				
+				
+      		} // closing displayMarkers function
+
   }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeFcGGhlohNnd4WKjN703Un99fGRjuAZs&libraries=geometry,places&callback=initMap"

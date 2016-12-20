@@ -1,17 +1,12 @@
-// This example requires the Places library. Include the libraries=places
-// parameter when you first load the API. For example:
-// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 var waypoints = [];
 var origin_place_id = null;
 var destination_place_id = null;
 var travel_mode = 'WALKING';
 var directionsService;
 var directionsDisplay;
-
-function initMap() {
-	var poliline;
-
-	var loc = [
+var poliline;
+var infowindow;
+var loc = [
 					     [53.345295, -6.263868, "1", false, "Temple Bar"],
 					     [53.355863, -6.329631, "2", false, "Pheonix Park"],
 					     [53.343864, -6.254808, "thr", false, "Trinity College"],
@@ -42,8 +37,10 @@ function initMap() {
 					     [53.339913, -6.271316, "14", false, "Stop no _ "],
 					     [53.287659, -6.242560, "15", false, "Dundrum"]
 			];
+var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Click</button></div>';
 
-	
+
+function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
           mapTypeControl: false,
           center: {lat: 53.3441, lng: -6.2675},
@@ -52,7 +49,6 @@ function initMap() {
     directionsService = new google.maps.DirectionsService;
     directionsDisplay = new google.maps.DirectionsRenderer;
     directionsDisplay.setMap(map);
-
 
     var origin_input = document.getElementById('origin-input');
     var destination_input = document.getElementById('destination-input');
@@ -67,7 +63,6 @@ function initMap() {
     var destination_autocomplete =
         new google.maps.places.Autocomplete(destination_input);
     destination_autocomplete.bindTo('bounds', map);
-
 
     // Sets a listener on a radio button to change the filter type on Places
     // Autocomplete.
@@ -120,15 +115,13 @@ function initMap() {
                 directionsService, directionsDisplay);
     });
 
-    // reroute btn listener
+    // reroute btn listener and info window
 	var reroute_btn = document.getElementById("reroute_btn");
       reroute_btn.addEventListener('click', function(){
-      	console.log(waypoints);
+      	console.log("rerouting with waypoints: " + waypoints);
       	 route(origin_place_id, destination_place_id, travel_mode, 
             directionsService, directionsDisplay, waypoints );
-      	 
       });
-
 
     function route(origin_place_id, destination_place_id, travel_mode,
                    directionsService, directionsDisplay, waypoints) {      	
@@ -153,24 +146,20 @@ function initMap() {
 			              	var isLocationNear = google.maps.geometry.poly.isLocationOnEdge(markerlatlng, new google.maps.Polyline({
 							  path: google.maps.geometry.encoding.decodePath(poliline)
 							}), 0.01); // 0.01 is about 1.1km ? 
-				          
 						  if (isLocationNear){
 						  	locarray.push(loc[i]);
-						  } else {
-						  	//console.log("not near");
-						  }
+						  } 
 					  }
 					  displayMarkers(locarray);
 		        } else {
 		              window.alert('Directions request failed due to ' + status);
 		        }
          	});        
-		}
-		//displaying markers near the poligon
+		} // end of route()
+		//displaying markers near the polygon
 		function displayMarkers(locarray){
 			var marker = [];
-			var content;
-			var infowindow;
+			var 
 			var latlongset;
 			infowindow = new google.maps.InfoWindow();
 			// TODO click button set flag for added to route 
@@ -179,15 +168,25 @@ function initMap() {
 				marker = new google.maps.Marker({
 					    position: latlongset,
 					    map: map,
-					    title: locarray[i][2]
+					    title: locarray[i][4]
 			 	});
-				//display info window content
-				content = locarray[i][4] + "   ";   
 				
 				google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
 				    return function() {
-				        infowindow.setContent(content + '<button type="button" id="addToRouteBtn">Click</button>');
+				    	infowindow.setContent(infoWindowHtml);
+				        //infowindow.setContent(content + '<button type="button" id="addToRouteBtn">Click</button>');
 				        infowindow.open(map,marker);
+				        var iw = document.getElementById('iw');
+						var iw_header = document.getElementById('iw_header');
+						var iw_content = document.getElementById('iw_content');
+						var iw_text = document.getElementById('iw_text'); // in content div with h2 and p
+						var iw_heading = document.getElementById('iw_heading');
+						var iw_paraghraph = document.getElementById('iw_paraghraph');
+						var iw_image = document.getElementById('iw_image');
+
+				    	iw_header.innerHTML = marker.title;
+				    	iw_paraghraph.innerHTML = marker.position;
+
 				        var addToRouteBtn = document.getElementById("addToRouteBtn");	    
 				        if (addToRouteBtn){
 							addToRouteBtn.addEventListener('click', function(){
@@ -203,12 +202,7 @@ function initMap() {
 
 				    };
 				})(marker,content,infowindow)); 
-
-				    
-
 			} // closing for loop
-			
-		
 		} // closing displayMarkers function
 
-}
+} // init() close

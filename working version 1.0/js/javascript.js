@@ -129,15 +129,27 @@ function initMap() {
           if (!origin_place_id || !destination_place_id) {
             return;
           }
-          directionsService.route({
-	            origin: {'placeId': origin_place_id},
-	            destination: {'placeId': destination_place_id},
-	            travelMode: travel_mode,
-	            waypoints: waypoints
+		directionsService.route({
+            origin: {'placeId': origin_place_id},
+            destination: {'placeId': destination_place_id},
+            travelMode: travel_mode,
+            waypoints: waypoints,
+            optimizeWaypoints: true
           }, function(response, status) {
 	          	//db with locasions
 	          	if (status === 'OK') {
 		              directionsDisplay.setDirections(response);
+		              var route = response.routes[0];
+		              var route_summary = document.getElementById('route_summary');
+		              route_summary.innerHTML = '';
+						for (var i = 0; i < route.legs.length; i++) {
+			              var routeSegment = i + 1;
+			              route_summary .innerHTML += '<b>Route Segment: ' + routeSegment +
+			                  '</b><br>';
+			              route_summary.innerHTML += route.legs[i].start_address + ' to ';
+			              route_summary.innerHTML += route.legs[i].end_address + '<br>';
+			              route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
+			            }
 		              //poliline from the JSON response array
 		              poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
 		              var locarray = []; // to be filled if its near
@@ -154,12 +166,12 @@ function initMap() {
 		        } else {
 		              window.alert('Directions request failed due to ' + status);
 		        }
-         	});        
+         	});
 		} // end of route()
 		//displaying markers near the polygon
 		function displayMarkers(locarray){
 			var marker = [];
-			var 
+			var content;
 			var latlongset;
 			infowindow = new google.maps.InfoWindow();
 			// TODO click button set flag for added to route 

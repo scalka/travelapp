@@ -9,7 +9,7 @@ var infowindow;
 var loc = [
 					     [53.345295, -6.263868, "1", false, "Temple Bar"],
 					     [53.355863, -6.329631, "2", false, "Pheonix Park"],
-					     [53.343864, -6.254808, "thr", false, "Trinity College"],
+					     [53.343864, -6.254808, "3", false, "Trinity College"],
 					     [53.342918, -6.267225, "4", false, "Dublin Castle"],
 					     [53.338490, -6.259569, "5", false, "St. Stephen's Green"],
 					     [53.343762, -6.260564, "6", false, "Molly Malone Statue"],
@@ -21,21 +21,21 @@ var loc = [
                         [53.349648, -6.207791, "13", false, "Dublin Port"],
 					     [53.364326, -6.206327, "14", false, "Clontarf Castle"],
 
-					     [53.372417, -6.278448, "14", false, "National Botanic Gardens"],
-					     [53.364326, -6.206327, "14", false, "Clontarf Castle"],
-					     [53.387373, -6.256976, "14", false, "DCU"],
-					     [53.388309, -6.066769, "14", false, "Howth"],
-					     [53.356234, -6.306160, "14", false, "Dublin ZOO"],
-					     [53.364326, -6.206327, "14", false, "IADT"],
-					     [53.295164, -6.133847, "14", false, "Dún Laoghaire "],
-					     [53.308122, -6.302724, "14", false, "Stop no _"],
-					     [53.364320, -6.206927, "14", false, "Stop no _ "],
-					     [53.364326, -6.206127, "14", false, "Stop no _ "],
-					     [53.364326, -6.206327, "14", false, "Stop no _ "],
-					     [53.342139, -6.286251, "14", false, "Stop no _ "],
-					     [53.298926, -6.132908, "14", false, "Stop no _ "],
-					     [53.339913, -6.271316, "14", false, "Stop no _ "],
-					     [53.287659, -6.242560, "15", false, "Dundrum"]
+					     [53.372417, -6.278448, "15", false, "National Botanic Gardens"],
+					     [53.364326, -6.206327, "16", false, "Clontarf Castle"],
+					     [53.387373, -6.256976, "17", false, "DCU"],
+					     [53.388309, -6.066769, "18", false, "Howth"],
+					     [53.356234, -6.306160, "19", false, "Dublin ZOO"],
+					     [53.364326, -6.206327, "20", false, "IADT"],
+					     [53.295164, -6.133847, "21", false, "Dún Laoghaire "],
+					     [53.308122, -6.302724, "22", false, "Stop no _"],
+					     [53.364320, -6.206927, "23", false, "Stop no _ "],
+					     [53.364326, -6.206127, "24", false, "Stop no _ "],
+					     [53.364326, -6.206327, "25", false, "Stop no _ "],
+					     [53.342139, -6.286251, "26", false, "Stop no _ "],
+					     [53.298926, -6.132908, "27", false, "Stop no _ "],
+					     [53.339913, -6.271316, "28", false, "Stop no _ "],
+					     [53.287659, -6.242560, "29", false, "Dundrum"]
 			];
 var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Click</button></div>';
 
@@ -180,7 +180,8 @@ function initMap() {
 				marker = new google.maps.Marker({
 					    position: latlongset,
 					    map: map,
-					    title: locarray[i][4]
+					    title: locarray[i][4],
+					    id: locarray[i][2]
 			 	});
 				
 				google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
@@ -202,19 +203,35 @@ function initMap() {
 				        var addToRouteBtn = document.getElementById("addToRouteBtn");	    
 				        if (addToRouteBtn){
 							addToRouteBtn.addEventListener('click', function(){
-								waypoints.push({
-									location: marker.position,
-									stopover: true
-								})
-								console.log("add to route: " + waypoints);
-							});	
+								//flag to check if waypoints is already added to the route
+								var exists = false;
+								//marker position 
+								var markerLat = marker.getPosition().lat();
+								var markerLng = marker.getPosition().lng();
+								// for loop to check if marker's position is already added to the route
+								for (var i = 0; i < waypoints.length; i++){
+									//checking lat and lng of all the waypoints if they are the same as marker
+									var waypointLat = waypoints[i].location.lat();
+									var waypointLng = waypoints[i].location.lng();
+									if (markerLat == waypointLat && markerLng == waypointLng){
+										exists = true; // change flag 
+										console.log("this stop is already included");
+									} 
+								}
+								// if flag = true stop is not duplicated if its false stop is added to the route
+								if (exists == false ){
+									waypoints.push({
+										location: marker.position,
+										stopover: true
+									});
+									console.log("waypoint added to the route");
+								} // if exists end
+							});	 // if add to route end
 						} else {
 							console.log("btn null");
 						}
-
 				    };
-				})(marker,content,infowindow)); 
+				})(marker,content,infowindow));  // close google.maps.event.addListener
 			} // closing for loop
 		} // closing displayMarkers function
-
 } // init() close

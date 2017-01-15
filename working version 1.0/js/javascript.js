@@ -52,10 +52,13 @@ function initMap() {
 
     var origin_input = document.getElementById('origin-input');
     var destination_input = document.getElementById('destination-input');
+
+    var bottom_controls = document.getElementById('bottom_controls');
+
     var modes = document.getElementById('mode-selector');
 // placing controls on the map
-/*    map.controls[google.maps.ControlPosition.TOP_LEFT].push(origin_input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(destination_input);
+    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(bottom_controls);
+   /* map.controls[google.maps.ControlPosition.TOP_LEFT].push(destination_input);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(modes);*/
 
     var origin_autocomplete = new google.maps.places.Autocomplete(origin_input);
@@ -264,18 +267,6 @@ function initMap() {
 	}	
 
 
-	var piemenu = new wheelnav('piemenu');
-	piemenu.spreaderInTitle = icon.plus;
-	piemenu.spreaderOutTitle = icon.cross;
-	piemenu.spreaderRadius = piemenu.wheelRadius * 0.13;
-	piemenu.sliceInitPathFunction = piemenu.slicePathFunction;
-	piemenu.initPercent = 0.1;
-	piemenu.wheelRadius = piemenu.wheelRadius * 0.83;
-	piemenu.navItemsContinuous = true;
-	piemenu.sliceAngle = 45;
-	piemenu.createWheel();
-	piemenu.setTooltips(['0','1','2','3']);
-	
 } // init() close
 
 /*directionsDisplay.setDirections(response);

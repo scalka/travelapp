@@ -1,7 +1,7 @@
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
 #map {
-  height: 70%; }
+  height: 90%; }
 
 html, body {
   height: 100%;
@@ -90,8 +90,8 @@ html, body {
   height: 100%; }
 
 #piemenu {
-  height: 400px;
-  width: 400px;
+  height: 200px;
+  width: 200px;
   margin: auto; }
 
 @media (max-width: 400px) {

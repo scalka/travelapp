@@ -46,6 +46,11 @@ function initMap() {
           center: {lat: 53.3441, lng: -6.2675},
           zoom: 13
     });
+    
+    //prevents displaying half of the map when loaded
+    google.maps.event.trigger(map, 'resize');
+    console.log("resize");
+
     directionsService = new google.maps.DirectionsService;
     directionsDisplay = new google.maps.DirectionsRenderer;
     directionsDisplay.setMap(map);
@@ -54,9 +59,9 @@ function initMap() {
     var destination_input = document.getElementById('destination-input');
     var modes = document.getElementById('mode-selector');
 
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(origin_input);
+/*    map.controls[google.maps.ControlPosition.TOP_LEFT].push(origin_input);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(destination_input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(modes);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(modes);*/
 
     var origin_autocomplete = new google.maps.places.Autocomplete(origin_input);
     origin_autocomplete.bindTo('bounds', map);

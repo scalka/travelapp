@@ -1,14 +1,30 @@
+
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 100%;
+        height: 70%;
       }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
+       html, body {
         height: 100%;
         margin: 0;
         padding: 0;
+      } 
+      .wrapper {
+        height: 100%;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;  
+        
+        -webkit-flex-flow: row wrap;
+        flex-flow: row wrap;
       }
+      .wrapper > * {
+        padding: 10px;
+        flex: 1 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
       .controls {
         margin-top: 10px;
         border: 1px solid transparent;
@@ -18,6 +34,13 @@
         height: 32px;
         outline: none;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      #inputs_div {
+        display: flex;
+        flex-flow: row wrap; /*direction "row" and yes, please wrap the items.*/
+        background-color: #e8e8e9;
+        padding: 10px;
       }
 
       #origin-input,
@@ -50,6 +73,10 @@
         font-weight: 300;
       }
 
+      #bottom_controls {
+
+      }
+
 /* info window */      
 #iw #iw-header {
   font-family: 'Open Sans Condensed', sans-serif;
@@ -67,4 +94,19 @@
   /*  box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6); */
   /*  border: 1px solid rgba(72, 181, 233, 0.6); */
   /*   border-radius: 2px 2px 10px 10px; */ // apply 10px to the bottom corners of the infowindow
+}
+
+
+
+
+@media all and (min-width: 600px) {
+  .aside { flex: 1 auto; }
+}
+
+@media all and (min-width: 800px) {
+  #map    { flex: 3 0px; }
+  #listview { order: 1; } 
+  #map    { order: 2; }
+  #route_summary { order: 3; }
+  #footer  { order: 4; }
 }

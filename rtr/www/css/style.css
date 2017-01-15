@@ -1,5 +1,5 @@
 /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
+* element that contains the map. */
 #map {
   height: 100%; }
 
@@ -18,6 +18,10 @@ html, body {
   height: 32px;
   outline: none;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); }
+
+#inputs_div {
+  display: flex;
+  flex-flow: row wrap; }
 
 #origin-input,
 #destination-input {

@@ -44,10 +44,14 @@
         
         <div class="pages">
             <div class="panel" id="main" data-title="Main" data-selected="true">
-                <input id="origin-input" class="controls" type="text" placeholder="Enter an origin location">
-
-                <input id="destination-input" class="controls" type="text"
-                    placeholder="Enter a destination location">
+                
+                <div id="inputs_div">
+                    <input id="origin-input" class="controls" type="text" placeholder="Enter an origin location">
+                    <input id="destination-input" class="controls" type="text" placeholder="Enter a destination location">
+                </div>
+                
+                
+                
 
                 <div id="mode-selector" class="controls">
                   <input type="radio" name="type" id="changemode-walking" checked="checked">
@@ -60,11 +64,17 @@
                   <label for="changemode-driving">Driving</label>
                   <button id="reroute_btn">Reroute</button>
                 </div>
+                
+                
                 <div id="route_summary"></div>
                 <div id="map"></div>
 
-                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeFcGGhlohNnd4WKjN703Un99fGRjuAZs&libraries=geometry,places&callback=initMap"
-                    async defer></script>
+                
+                
+                
+                
+                
+                
             </div>
           <!--  <div class="panel" id="page2" data-title="Page 2">
                 This is Page 2
@@ -88,6 +98,9 @@
         </nav>
 
     </div>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeFcGGhlohNnd4WKjN703Un99fGRjuAZs&libraries=geometry,places&callback=initMap"
+                    async defer></script>
 </body>
 
 </html>

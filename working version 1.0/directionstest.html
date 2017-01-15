@@ -5,16 +5,24 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
 
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="css/demo.css" />
+    <link rel="stylesheet" type="text/css" href="css/component1.css" />
 
     <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
     <script type="text/javascript" src="js/javascript.js"></script>
+    <script src="js/polyfills.js"></script>
+    <script src="js/modernizr-2.6.2.min.js"></script>
 
   </head>
   <body>
 
     <div class="wrapper">
+
       <div id="inputs_div">
       <input id="origin-input" class="controls" type="text"
         placeholder="Enter an origin location">
@@ -41,11 +49,27 @@
 
 
     <div id="map"></div>
-     <div id="bottom_controls">
-      <button id="reroute_btn">Reroute</button>
-      <button id="route_summary_btn">Route Summary</button>
-      <button id="listview_btn">ListView</button>
-    </div> 
+<!--      <div id="bottom_controls">
+       <button id="reroute_btn">Reroute</button> 
+       <button id="route_summary_btn">Route Summary</button> 
+       <button id="listview_btn">ListView</button> 
+    </div>  -->
+<!-- menu bottom -->
+    <div class="component">
+        <!-- Start Nav Structure -->
+        <button class="cn-button" id="cn-button">+</button>
+        <div class="cn-wrapper" id="cn-wrapper">
+            <ul>
+              <li ><a href="#"><span class="icon-picture" ><button id="reroute_btn">Reroute</button></span></a></li>
+              <li><a href="#"><span class="icon-headphones"><button id="route_summary_btn">Route Summary</button></span></a></li>
+              <li><a href="#"><span class="icon-home"> <button id="listview_btn">ListView</button></span></a></li>
+              <li><a href="#"><span class="icon-facetime-video"></span></a></li>
+              <li><a href="#"><span class="icon-envelope-alt"></span></a></li>
+             </ul>
+        </div>
+        <div id="cn-overlay" class="cn-overlay"></div>
+        <!-- End Nav Structure -->
+      </div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeFcGGhlohNnd4WKjN703Un99fGRjuAZs&libraries=geometry,places&callback=initMap"
         async defer></script>

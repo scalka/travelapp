@@ -41,6 +41,47 @@ var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="
 
 
 function initMap() {
+
+//menu bottom -----------------------------------------------------------------------
+	var button = document.getElementById('cn-button'),
+	    wrapper = document.getElementById('cn-wrapper'),
+	    overlay = document.getElementById('cn-overlay');
+
+	//open and close menu when the button is clicked
+	var open = false;
+	button.addEventListener('click', handler, false);
+	wrapper.addEventListener('click', cnhandle, false);
+
+	function cnhandle(e){
+		e.stopPropagation();
+	}
+
+	function handler(e){
+		if (!e) var e = window.event;
+	 	e.stopPropagation();//so that it doesn't trigger click event on document
+
+	  	if(!open){
+	    	openNav();
+	  	}
+	 	else{
+	    	closeNav();
+	  	}
+	}
+	function openNav(){
+		open = true;
+	    button.innerHTML = "-";
+/*	    classie.add(overlay, 'on-overlay');*/
+	    classie.add(wrapper, 'opened-nav');
+	}
+	function closeNav(){
+		open = false;
+		button.innerHTML = "+";
+		/*classie.remove(overlay, 'on-overlay');*/
+		classie.remove(wrapper, 'opened-nav');
+	}
+	document.addEventListener('click', closeNav);
+//end menu bottom -----------------------------------------------------------------------------------
+
     var map = new google.maps.Map(document.getElementById('map'), {
           mapTypeControl: false,
           center: {lat: 53.3441, lng: -6.2675},
@@ -265,23 +306,7 @@ function initMap() {
 			listview.innerHTML += ' <ul> <li> ' + locarray[i][4] +  ' </li> </ul> ';
 		}
 	}	
-
+	
 
 } // init() close
 
-/*directionsDisplay.setDirections(response);
-
-		              route_summary.innerHTML = '';
-						for (var i = 0; i < route.legs.length; i++) {
-			              var routeSegment = i + 1;
-			              route_summary .innerHTML += '<b>Route Segment: ' + routeSegment +
-			                  '</b><br>';
-			              route_summary.innerHTML += route.legs[i].start_address + ' to ';
-			              route_summary.innerHTML += route.legs[i].end_address + '<br>';
-			              route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
-			            }
-
-
-			            <ul>
-			            <li></li>
-			            </ul>*/

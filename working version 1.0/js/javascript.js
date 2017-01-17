@@ -37,7 +37,7 @@ var loc = [
 					     [53.339913, -6.271316, "28", false, "Stop no _ "],
 					     [53.287659, -6.242560, "29", false, "Dundrum"]
 			];
-var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Click</button></div>';
+var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
 
 
 function initMap() {
@@ -243,6 +243,7 @@ function initMap() {
 				google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
 				    return function() {
 				    	infowindow.setContent(infoWindowHtml);
+				    	console.log(infowindow);
 				        //infowindow.setContent(content + '<button type="button" id="addToRouteBtn">Click</button>');
 				        infowindow.open(map,marker);
 				        var iw = document.getElementById('iw');
@@ -255,7 +256,6 @@ function initMap() {
 
 				    	iw_header.innerHTML = marker.title;
 				    	iw_paraghraph.innerHTML = marker.position;
-
 				        var addToRouteBtn = document.getElementById("addToRouteBtn");	    
 				        if (addToRouteBtn){
 							addToRouteBtn.addEventListener('click', function(){

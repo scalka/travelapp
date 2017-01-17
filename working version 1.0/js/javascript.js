@@ -95,12 +95,13 @@ function initMap() {
     var destination_input = document.getElementById('destination-input');
 
     var bottom_controls = document.getElementById('bottom_controls');
+    var switch_view_control_list = document.getElementById('switch_view_control_list');
 
     var modes = document.getElementById('mode-selector');
 // placing controls on the map
     map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(bottom_controls);
-   /* map.controls[google.maps.ControlPosition.TOP_LEFT].push(destination_input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(modes);*/
+   	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(switch_view_control_list);
+   /* map.controls[google.maps.ControlPosition.TOP_LEFT].push(modes);*/
 
     var origin_autocomplete = new google.maps.places.Autocomplete(origin_input);
     origin_autocomplete.bindTo('bounds', map);
@@ -166,6 +167,7 @@ function initMap() {
             directionsService, directionsDisplay, waypoints );
       });
 
+    var route_summary_btn = document.getElementById("route_summary_btn");
 
     function route(origin_place_id, destination_place_id, travel_mode,
                    directionsService, directionsDisplay, waypoints) {      	
@@ -184,28 +186,6 @@ function initMap() {
 	          	if (status === 'OK') {
 		              directionsDisplay.setDirections(response);
 		              var route = response.routes[0];
-
-			          var route_summary_btn = document.getElementById("route_summary_btn");
-		              route_summary_btn.addEventListener('click', function(){
-
-		              	  console.log("route route_summary display");
-			              var route_summary = document.getElementById('route_summary');
-			              $('#route_summary').toggle();
-			              $('#map').toggle();
-			              route_summary.innerHTML = '';
-							for (var i = 0; i < route.legs.length; i++) {
-				              var routeSegment = i + 1;
-				              route_summary .innerHTML += '<b>Route Segment: ' + routeSegment +
-				                  '</b><br>';
-				              route_summary.innerHTML += route.legs[i].start_address + ' to ';
-				              route_summary.innerHTML += route.legs[i].end_address + '<br>';
-				              route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
-				            }
-
-		              })
-
-
-
 		              //poliline from the JSON response array
 		              poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
 		              var locarray = []; // to be filled if its near
@@ -219,6 +199,21 @@ function initMap() {
 						  } 
 					  }
 					  displayMarkers(locarray);
+					   route_summary_btn.addEventListener('click', function(){
+		              	  console.log("route route_summary display");
+			              var route_summary = document.getElementById('route_summary');
+			              $('#route_summary').toggle();
+			              $('#map').toggle();
+			              route_summary.innerHTML = '';
+							for (var i = 0; i < route.legs.length; i++) {
+				              var routeSegment = i + 1;
+				              route_summary .innerHTML += '<b>Route Segment: ' + routeSegment +
+				                  '</b><br>';
+				              route_summary.innerHTML += route.legs[i].start_address + ' to ';
+				              route_summary.innerHTML += route.legs[i].end_address + '<br>';
+				              route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
+				            }
+		              }); // end event listener
 		        } else {
 		              window.alert('Directions request failed due to ' + status);
 		        }

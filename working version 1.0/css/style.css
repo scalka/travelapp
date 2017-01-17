@@ -66,6 +66,16 @@ html, body {
   font-size: 13px;
   font-weight: 300; }
 
+.control {
+  display: inline-block;
+  margin: 0 10px 0 0;
+  padding: 15px 45px;
+  line-height: 3;
+  appearance: none;
+  box-shadow: none;
+  border-radius: 0;
+  background-color: #48b5e9; }
+
 /* info window */
 #iw #iw-header {
   font-family: 'Open Sans Condensed', sans-serif;

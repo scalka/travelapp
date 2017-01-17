@@ -73,8 +73,17 @@
         font-weight: 300;
       }
 
-      #bottom_controls {
+      
 
+      .control {
+        display: inline-block;
+        margin: 0 10px 0 0;
+        padding: 15px 45px;
+        line-height: 3;
+        appearance: none;
+        box-shadow: none;
+        border-radius: 0;
+        background-color: #48b5e9;
       }
 
 /* info window */      

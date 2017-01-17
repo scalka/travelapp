@@ -36,35 +36,37 @@
       <input type="radio" name="type" id="changemode-driving">
       <label for="changemode-driving">Driving</label>
 
+
     </div>
       
     </div>
 
     <div id="route_summary" style="display: none"></div>
 
+    <div id="switch_view_control_list">
+      <button class="control" id="listview_btn">ListView</button> 
+    </div>
+
     <div id="listview" style="display: none">
+      
     </div>
 
 
 
 
     <div id="map"></div>
-<!--      <div id="bottom_controls">
-       <button id="reroute_btn">Reroute</button> 
-       <button id="route_summary_btn">Route Summary</button> 
-       <button id="listview_btn">ListView</button> 
-    </div>  -->
+
 <!-- menu bottom -->
     <div class="component">
         <!-- Start Nav Structure -->
         <button class="cn-button" id="cn-button">+</button>
         <div class="cn-wrapper" id="cn-wrapper">
             <ul>
-              <li ><a href="#"><span class="icon-picture" ><button id="reroute_btn">Reroute</button></span></a></li>
-              <li><a href="#"><span class="icon-headphones"><button id="route_summary_btn">Route Summary</button></span></a></li>
-              <li><a href="#"><span class="icon-home"> <button id="listview_btn">ListView</button></span></a></li>
-              <li><a href="#"><span class="icon-facetime-video"></span></a></li>
-              <li><a href="#"><span class="icon-envelope-alt"></span></a></li>
+              <li><a href="#"><!-- <span class="icon-facetime-video"></span> --></a></li>
+              <li><a href="#"><!-- <span class="icon-headphones"></span> --><button id="route_summary_btn"> info </button></a></li>
+              <li ><a id="reroute_btn"><!-- <span class="icon-play" ></span> --><button >go</button></a></li>
+              <li><a href="#"><!-- <span class="icon-home"> </span> --><button id="export_btn">Export</button></a></li>
+              <li><a href="#"><!-- <span class="icon-envelope-alt"></span> --></a></li> 
              </ul>
         </div>
         <div id="cn-overlay" class="cn-overlay"></div>

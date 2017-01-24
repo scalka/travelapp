@@ -3,13 +3,15 @@ var origin_input;
 var destination_input;
 var bottom_controls;
 var switch_view_control_list;
+var switch_view_summary;
 var modes;
 var origin_autocomplete;
 var destination_autocomplete;
-
+var route;
 var radioButton;
-
+var listview_btn;
 var route_summary_btn;
+var route_summary;
 
 var locarray;
 
@@ -58,45 +60,6 @@ var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="
 
 function initMap() {
 
-//menu bottom -----------------------------------------------------------------------
-	var button = document.getElementById('cn-button'),
-	    wrapper = document.getElementById('cn-wrapper'),
-	    overlay = document.getElementById('cn-overlay');
-
-	//open and close menu when the button is clicked
-	var open = false;
-	button.addEventListener('click', handler, false);
-	wrapper.addEventListener('click', cnhandle, false);
-
-	function cnhandle(e){
-		e.stopPropagation();
-	}
-
-	function handler(e){
-		if (!e) var e = window.event;
-	 	e.stopPropagation();//so that it doesn't trigger click event on document
-
-	  	if(!open){
-	    	openNav();
-	  	}
-	 	else{
-	    	closeNav();
-	  	}
-	}
-	function openNav(){
-		open = true;
-	    button.innerHTML = "-";
-	    classie.add(overlay, 'on-overlay');
-	    classie.add(wrapper, 'opened-nav');
-	}
-	function closeNav(){
-		open = false;
-		button.innerHTML = "+";
-		/*classie.remove(overlay, 'on-overlay');*/
-		classie.remove(wrapper, 'opened-nav');
-	}
-	document.addEventListener('click', closeNav);
-//end menu bottom -----------------------------------------------------------------------------------*/
 
     map = new google.maps.Map(document.getElementById('map'), {
           mapTypeControl: false,
@@ -110,14 +73,13 @@ function initMap() {
 	origin_input = document.getElementById('origin-input');
     destination_input = document.getElementById('destination-input');
 
-    bottom_controls = document.getElementById('bottom_controls');
     switch_view_control_list = document.getElementById('switch_view_control_list');
-
-    modes = document.getElementById('mode-selector');
+    switch_view_summary = document.getElementById('switch_view_summary');
+   /* modes = document.getElementById('mode-selector');*/
 	// placing controls on the map
-    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(bottom_controls);
+    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(switch_view_summary);
    	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(switch_view_control_list);
-   /* map.controls[google.maps.ControlPosition.TOP_LEFT].push(modes);*/
+
 
     origin_autocomplete = new google.maps.places.Autocomplete(origin_input);
     origin_autocomplete.bindTo('bounds', map);
@@ -171,6 +133,30 @@ function initMap() {
     });
 
     route_summary_btn = document.getElementById("route_summary_btn");
+	route_summary = document.getElementById('route_summary');
+	route_summary_btn.addEventListener('click', function(){
+              
+/*		 $('#route_summary').toggle();
+      $('#map').toggle();*/
+      route_summary.innerHTML = '';
+		for (var i = 0; i < route.legs.length; i++) {
+          var routeSegment = i + 1;
+          route_summary .innerHTML += '<b>Route Segment: ' + routeSegment +
+              '</b><br>';
+          route_summary.innerHTML += route.legs[i].start_address + ' to ';
+          route_summary.innerHTML += route.legs[i].end_address + '<br>';
+          route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
+        }
+
+    }); // end event listener
+
+
+    listview_btn = document.getElementById("listview_btn");
+	listview_btn.addEventListener('click', function(){
+		console.log("calling list");
+		displayList(locarray);
+	});
+
 		
 } // init() close
 
@@ -210,29 +196,10 @@ function route(origin_place_id, destination_place_id, travel_mode,
 			  } 
 		  }
 		  displayMarkers(locarray);
-		   route_summary_btn.addEventListener('click', function(){
-          	  console.log("route route_summary display");
-              var route_summary = document.getElementById('route_summary');
-/*			              $('#route_summary').toggle();
-              $('#map').toggle();*/
-              route_summary.innerHTML = '';
-				for (var i = 0; i < route.legs.length; i++) {
-	              var routeSegment = i + 1;
-	              route_summary .innerHTML += '<b>Route Segment: ' + routeSegment +
-	                  '</b><br>';
-	              route_summary.innerHTML += route.legs[i].start_address + ' to ';
-	              route_summary.innerHTML += route.legs[i].end_address + '<br>';
-	              route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
-	            }
-          }); // end event listener
         } else {
               window.alert('Directions request failed due to ' + status);
         }
-        var listview_btn = document.getElementById("listview_btn");
-				listview_btn.addEventListener('click', function(){
-					console.log("calling list");
-					displayList(locarray);
-				});
+        
  		});
 } // end of route()
 

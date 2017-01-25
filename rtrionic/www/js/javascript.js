@@ -1,4 +1,3 @@
-angular.module('ionicApp', ['ionic'])
 var map;
 var origin_input;
 var destination_input;
@@ -57,12 +56,9 @@ var loc = [
 					     [53.287659, -6.242560, "29", false, "Dundrum"]
 			];
 var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
-  
- .controller('AppCtrl', function() {
 
-  ionic.Platform.ready(function() {
-    navigator.splashscreen.hide();
-    function initMap() {
+
+function initMap() {
 
 
     map = new google.maps.Map(document.getElementById('map'), {
@@ -162,11 +158,7 @@ var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="
 	});
 
 		
-} // init() close  
-  });
-
- });
-              
+} // init() close
 
 function transportModes(id, mode) {
       radioButton = document.getElementById(id);
@@ -291,4 +283,3 @@ function displayList(locarray){
 		listview.innerHTML += ' <ul> <li> ' + locarray[i][4] +  ' </li> </ul> ';
 	}
 }	
-              

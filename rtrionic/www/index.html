@@ -1,23 +1,18 @@
 <!DOCTYPE html>
 <html ng-app="ionicApp">
 <head>
-
+  <title>Router</title>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-
-  <title>Ionic-AngularJS-Cordova</title>
-
   <!-- Ionic framework - replace the CDN links with local files and build -->    
   <link href="lib/ionicframework/ionic.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+    
   <script src="lib/ionicframework/ionic.bundle.min.js"></script>
-    
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script src="js/app.js"></script>
-    
-  <script src="cordova.js"></script>
-
-  <style>
-      .box {height:300px;padding: 10px}
-  </style>      
+  <!--<script src="cordova.js"></script>-->
+  <script type="text/javascript" src="js/javascript.js"></script>
 </head>
 
 <body ng-controller="AppCtrl">
@@ -25,8 +20,44 @@
     <ion-header-bar class="bar-positive">
       <h1 class="title">Title</h1>
     </ion-header-bar>
+    
     <ion-content padding="true">
-      <p>Hello World</p>
+              <div id="inputs_div">
+              <input id="origin-input" class="controls" type="text"
+                placeholder="Enter an origin location">
+
+              <input id="destination-input" class="controls" type="text"
+                placeholder="Enter a destination location">
+            <div id="mode-selector" class="controls">
+              <input type="radio" name="type" id="changemode-walking" checked="checked">
+              <label for="changemode-walking">Walking</label>
+
+              <input type="radio" name="type" id="changemode-driving">
+              <label for="changemode-driving">Driving</label>
+            </div>
+            </div>
+                <div id="switch_view_control_list">
+              <button class="control" id="listview_btn">ListView</button> 
+            </div>
+
+            <div id="listview" style="display: none">
+            </div>
+
+            <div id="route_summary" style="display: none">
+            </div>
+
+            <div id="switch_view_summary">
+              <button class="control" id="route_summary_btn">Summary</button>
+              <div id="route_summary" style="display: none"></div>
+            </div>
+
+            <div id="map"></div>
+
+
+
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeFcGGhlohNnd4WKjN703Un99fGRjuAZs&libraries=geometry,places&callback=initMap"
+                async defer></script>
+
     </ion-content>
 
 </body>

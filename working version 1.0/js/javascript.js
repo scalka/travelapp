@@ -141,9 +141,7 @@ function initMap() {
     route_summary_btn = document.getElementById("route_summary_btn");
 	route_summary = document.getElementById('route_summary');
 
-	route_summary_btn.addEventListener('click', function(){
-              
-
+	route_summary_btn.addEventListener('click', function(){     
       route_summary.innerHTML = '';
 		for (var i = 0; i < route.legs.length; i++) {
           var routeSegment = i + 1;
@@ -154,7 +152,7 @@ function initMap() {
           route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
         }
         console.log(route_summary);
-        $('#modale').modal();
+        $('#modal_summary').modal();
 
     }); // end event listener
 
@@ -164,6 +162,7 @@ function initMap() {
 	listview_btn.addEventListener('click', function(){
 		console.log("calling list");
 		displayList(locarray);
+		$('#modal_list').modal();
 	});
 
 		
@@ -283,12 +282,37 @@ function displayMarkers(locarray){
 } // closing displayMarkers function
 
 function displayList(locarray){
-	$('#map').toggle();
-	$('#listview').toggle();
+
 	var listview = document.getElementById('listview');
+	
+
+	listview.innerHTML = '';
+
+	for (var i=0; i < locarray.length; i++){
+		var place_name = locarray[i][4];
+		var place_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum";
+		listview.innerHTML += '<div class="card" > <img src="http://placehold.it/350x150" class="img-thumbnail" alt="image" width="304" height="236">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + place_description + '</p> <a href="#" class="btn btn-primary">Add</a> </div> </div>'
+
+
+	}
+}	
+
+
+/*
+function displayList(locarray){
+
+	var listview = document.getElementById('listview');
+	var place_name = document.getElementById('place_name');
+	var place_description = document.getElementById('place_description');
+
 	listview.innerHTML = '';
 	for (var i=0; i < locarray.length; i++){
 		console.log("num of markers: " + locarray.length);
-		listview.innerHTML += ' <ul> <li> ' + locarray[i][4] +  ' </li> </ul> ';
+		listview.innerHTML += cardHTML;
+		place_name.innerHTML = locarray[i][4];
 	}
+
 }	
+
+*/
+

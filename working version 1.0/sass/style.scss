@@ -60,13 +60,13 @@
         border-color: #4d90fe;
       }
 
-      #mode-selector {
+/*       #mode-selector {
         color: #fff;
         background-color: #4d90fe;
         margin-left: 12px;
         padding: 5px 11px 0px 11px;
       }
-
+ */
       #mode-selector label {
         font-family: Roboto;
         font-size: 13px;
@@ -115,9 +115,9 @@
 
 }
 
-
-
-
+.navbar-toggle {
+  float: left;
+}
 
 @media all and (min-width: 600px) {
   .aside { flex: 1 auto; }

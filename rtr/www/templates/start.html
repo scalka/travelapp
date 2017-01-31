@@ -1,18 +1,49 @@
 <ion-view title="Start" id="page1">
   <ion-content padding="true" class="has-header">
-    <form id="start-form3" class="list">
+    <form id="start-form" class="list" ng-controller="pickYourStopsCtrl">
+
       <label class="item item-input controls" id="start-input5">
-        <span class="input-label">Input</span>
-        <input type="text" placeholder="">
+        <span class="input-label">Start</span>
+        <input id="origin-input" class="controls" type="text"
+        placeholder="Enter an origin location">
       </label>
+
       <label class="item item-input controls" id="start-input6">
-        <span class="input-label">Input</span>
-        <input type="text" placeholder="">
+        <span class="input-label">End</span>
+        <input id="destination-input" class="controls" type="text"
+        placeholder="Enter a destination location">
       </label>
+
+      <label class="item item-input controls" id="start-input7">
+        <ion-radio ng-model="changemode" ng-value="WALKING" id="changemode-walking" checked="checked">Walking</ion-radio>
+        <ion-radio ng-model="changemode" ng-value="DRIVING" id="changemode-walking" checked="checked">Driving</ion-radio>
+      </label>
+       
+
+
+
       <ion-item class="range range-positive" id="start-range1">Range
         <input type="range" value="50" min="0" max="100" step="1">
+      </ion-item> 
+
+      <ion-item>
+      <button ng-click="routeFunction()" class="button button-block button-positive">
+        PLAN
+    </button>
       </ion-item>
+
+
     </form>
-    <a ui-sref="menu.pickYourStops" id="start-button3" class="button button-positive  button-block">PLAN</a>
+   
+
+    <ion-pane class="map-container">
+      <div id="map"></div>
+    </ion-pane>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeFcGGhlohNnd4WKjN703Un99fGRjuAZs&libraries=geometry,places&callback=initMap"
+        async defer></script>     
+
+
+
   </ion-content>
 </ion-view>

@@ -1,16 +1,12 @@
-<ion-view title="Pick your stops" id="page6">
-  <ion-content padding="true" class="has-header">
-    <div id="pickYourStops-button-bar2" class="button-bar">
+<ion-view title="Pick your stops" id="page6" >
+  <ion-content  padding="true" class="has-header">
+     <div id="pickYourStops-button-bar2" class="button-bar">
       <button id="pickYourStops-button11" class="button button-positive  button-block icon-right ion-map"></button>
       <a ui-sref="menu.list" id="pickYourStops-button12" class="button button-positive  button-block icon-right ion-android-list"></a>
     </div>
+    <ion-pane class="map-container">
+  		<div id="map"></div>
+  	</ion-pane>
 
-    <div id="map"></div>
-
-
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeFcGGhlohNnd4WKjN703Un99fGRjuAZs&libraries=geometry,places&callback=initMap"
-        async defer></script>
-    
   </ion-content>
 </ion-view>

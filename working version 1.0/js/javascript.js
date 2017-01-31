@@ -75,6 +75,8 @@ function initMap() {
 
     switch_view_control_list = document.getElementById('switch_view_control_list');
     switch_view_summary = document.getElementById('switch_view_summary');
+    plan_button = document.getElementById("plan_button");
+	
    /* modes = document.getElementById('mode-selector');*/
 	// placing controls on the map
     map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(switch_view_summary);
@@ -113,8 +115,8 @@ function initMap() {
           // If the place has a geometry, store its place ID and route if we have
           // the other place ID
           origin_place_id = place.place_id;
-          route(origin_place_id, destination_place_id, travel_mode,
-                directionsService, directionsDisplay);
+          /*routeFunction(origin_place_id, destination_place_id, travel_mode,
+                directionsService, directionsDisplay);*/
     });
 
     destination_autocomplete.addListener('place_changed', function() {
@@ -128,16 +130,20 @@ function initMap() {
           // If the place has a geometry, store its place ID and route if we have
           // the other place ID
           destination_place_id = place.place_id;
-          route(origin_place_id, destination_place_id, travel_mode,
+          routeFunction(origin_place_id, destination_place_id, travel_mode,
                 directionsService, directionsDisplay);
+
+          $('#plan_form').hide();
     });
+
+
 
     route_summary_btn = document.getElementById("route_summary_btn");
 	route_summary = document.getElementById('route_summary');
+
 	route_summary_btn.addEventListener('click', function(){
               
-/*		 $('#route_summary').toggle();
-      $('#map').toggle();*/
+
       route_summary.innerHTML = '';
 		for (var i = 0; i < route.legs.length; i++) {
           var routeSegment = i + 1;
@@ -147,8 +153,11 @@ function initMap() {
           route_summary.innerHTML += route.legs[i].end_address + '<br>';
           route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
         }
+        console.log(route_summary);
+        $('#modale').modal();
 
     }); // end event listener
+
 
 
     listview_btn = document.getElementById("listview_btn");
@@ -167,7 +176,7 @@ function transportModes(id, mode) {
       });
 }
 
-function route(origin_place_id, destination_place_id, travel_mode,
+function routeFunction(origin_place_id, destination_place_id, travel_mode,
                    directionsService, directionsDisplay, waypoints) {      	
       if (!origin_place_id || !destination_place_id) {
         return;
@@ -182,7 +191,7 @@ function route(origin_place_id, destination_place_id, travel_mode,
       	//db with locasions
       	if (status === 'OK') {
           directionsDisplay.setDirections(response);
-          var route = response.routes[0];
+          route = response.routes[0];
           //poliline from the JSON response array
           poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
           locarray = []; // to be filled if its near
@@ -261,7 +270,7 @@ function displayMarkers(locarray){
 							});
 							infowindow.close();
 							console.log("rerouting with waypoints: " + waypoints);
-					      	route(origin_place_id, destination_place_id, travel_mode, 
+					      	routeFunction(origin_place_id, destination_place_id, travel_mode, 
 					            directionsService, directionsDisplay, waypoints );
 						} // if exists end
 					});	 // if add to route end

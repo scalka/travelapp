@@ -7,80 +7,68 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
 
-<!--     <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script> -->
+    <!--     <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script> -->
     <script type="text/javascript" src="js/javascript.js"></script>
 
   </head>
-  <body>
-  <nav class="navbar navbar-inverse navbar-static-top custom-navbar " role="navigation" id="nav">
-    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <div class="navbar-collapse collapse navbar-fixed-side navbar-fixed-side-left">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <div class="navbar-header navbar-right">
-        <p class="navbar-text">
-        <a href="#" class="navbar-link">Username</a>
-        </p>
+  <body >
+    <nav class="navbar navbar-static-top custom-navbar " role="navigation" id="nav">
+      <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="index.html">Start</a>
+        <a href="addnewstop.html">Add new stop</a>
+
       </div>
+      <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+    </nav>
+
+
+      <form id="plan_form" class="center-block">
+
+              <ul class="flex-ul">
+                <li>
+                  <input  type="radio" name="type" id="changemode-walking" checked="checked">
+                  <label for="changemode-walking">Walking</label>
+                </li>
+                <li>
+                  <input class="" type="radio" name="type" id="changemode-driving">
+                  <label for="changemode-driving">Driving</label>
+                </li>
+                <li>
+                  <input id="origin-input"  type="text"
+                  placeholder="Enter an origin location">
+                </li>
+                <li>
+                  <input id="destination-input"  type="text"
+                    placeholder="Enter a destination location">
+                </li>    
+              </ul>
+
+      </form>
+
+        
+
+    <div id="switch_view_control_list">
+      <button class="control" id="listview_btn">ListView</button> 
     </div>
-  </nav>
-
-
-  <form id="plan_form">
-      <div id="mode-selector" class="controls form-group">
-        <input type="radio" name="type" id="changemode-walking" checked="checked">
-        <label for="changemode-walking">Walking</label>
-
-        <input type="radio" name="type" id="changemode-driving">
-        <label for="changemode-driving">Driving</label>
-      </div>
-      <div class="controls form-group">
-          <input id="origin-input" class="controls" type="text"
-          placeholder="Enter an origin location">
-
-        <input id="destination-input" class="controls" type="text"
-          placeholder="Enter a destination location">
-      </div>    
-   </div>
-  </form>
-
-        
-
-        <div id="switch_view_control_list">
-          <button class="control" id="listview_btn">ListView</button> 
-        </div>
-
-        
-
-        
-        
 
     <div id="map"></div>
 
-
-
     <div id="switch_view_summary">
       <button type="button" class="btn control" id="route_summary_btn">Summary</button>
-      
     </div>
+
+
 
     <!-- Modal list view-->
     <div class="modal fade" id="modal_list" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">

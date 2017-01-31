@@ -14,7 +14,7 @@ var route_summary_btn;
 var route_summary;
 
 var locarray;
-
+var form;
 
 var waypoints = [];
 var origin_place_id = null;
@@ -56,6 +56,18 @@ var loc = [
 					     [53.287659, -6.242560, "29", false, "Dundrum"]
 			];
 var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
+var navopen = false;
+
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    navopen = true;
+}
+
+function closeNav() {
+    if (navopen = true){
+    	document.getElementById("mySidenav").style.width = "0";
+    } 
+}
 
 
 function initMap() {
@@ -76,6 +88,9 @@ function initMap() {
     switch_view_control_list = document.getElementById('switch_view_control_list');
     switch_view_summary = document.getElementById('switch_view_summary');
     plan_button = document.getElementById("plan_button");
+
+    form = document.getElementById('plan_form');
+/*    map.controls[google.maps.ControlPosition.TOP_CENTER].push(form);*/
 	
    /* modes = document.getElementById('mode-selector');*/
 	// placing controls on the map

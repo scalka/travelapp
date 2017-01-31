@@ -1,90 +1,87 @@
+$primaryColor: #757575;
+$secondaryColor: #43a047;
+$accentColor: #f4511e;
+$btnColor:  #7cb342;
+$lightColor: #f6f2f2 ; 
+$textColor: #37474f;
+
+
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+
 
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 90%;
+        height: 100%;
       }
        html, body {
         height: 100%;
         margin: 0;
         padding: 0;
       } 
-      .wrapper {
-        height: 100%;
-        display: -webkit-box;
-        display: -moz-box;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;  
-        
-        -webkit-flex-flow: row wrap;
-        flex-flow: row wrap;
-      }
-      .wrapper > * {
-        padding: 10px;
-        flex: 1 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      .controls {
-        margin-top: 10px;
-        border: 1px solid transparent;
-        border-radius: 2px 0 0 2px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        height: 32px;
-        outline: none;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      }
-
-      #inputs_div {
-        display: flex;
-        flex-flow: row wrap; /*direction "row" and yes, please wrap the items.*/
-        background-color: #e8e8e9;
-        padding: 10px;
-      }
-
-      #origin-input,
-      #destination-input {
-        background-color: #fff;
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-        margin-left: 12px;
-        padding: 0 11px 0 13px;
-        text-overflow: ellipsis;
-        width: 200px;
-      }
-
-      #origin-input:focus,
-      #destination-input:focus {
-        border-color: #4d90fe;
-      }
-
-/*       #mode-selector {
-        color: #fff;
-        background-color: #4d90fe;
-        margin-left: 12px;
-        padding: 5px 11px 0px 11px;
-      }
- */
-      #mode-selector label {
-        font-family: Roboto;
-        font-size: 13px;
-        font-weight: 300;
-      }
 
 
-
-      .control {
-        display: inline-block;
-        margin: 0 10px 0 0;
-        padding: 15px 45px;
-        line-height: 3;
-        appearance: none;
-        box-shadow: none;
-        border-radius: 0;
-        background-color: #48b5e9;
+      #plan_form{
+        position: absolute;
+        margin: auto;
+        z-index: 99;
+        background-color: $lightColor;
+        width: 50%;
       }
+
+       .flex-ul {
+          display: flex;
+          flex-flow: column wrap;
+          justify-content: space-around;
+          background-color: $primaryColor;
+          list-style: none;
+/*           margin: 0 10px 0 0;
+          padding: 15px 45px; */
+       }
+
+       .flex-ul > li {
+          flex: 0 1 auto;
+          background-color: $lightColor;
+        /*   text-overflow: ellipsis; */ 
+          margin: 8px;
+          padding: 5px;
+          box-shadow: 10px 10px 5px #888888;
+
+       }
 
 /* info window */      
 #iw #iw_header {
@@ -129,4 +126,9 @@
   #map    { order: 2; }
   #route_summary { order: 3; }
   #footer  { order: 4; }
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
 }

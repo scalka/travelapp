@@ -28,39 +28,34 @@
   font-size: 36px;
   margin-left: 50px; }
 
-/* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-#map {
-  height: 100%; }
-
 html, body {
   height: 100%;
   margin: 0;
   padding: 0; }
 
-#plan_form {
+#form_div {
   position: absolute;
-  margin: auto;
   z-index: 99;
-  background-color: #f6f2f2;
-  width: 50%; }
+  width: 100%;
+  background-color: rgba(117, 117, 117, 0.59); }
 
 .flex-ul {
   display: flex;
   flex-flow: column wrap;
   justify-content: space-around;
-  background-color: #757575;
-  list-style: none;
-  /*           margin: 0 10px 0 0;
-            padding: 15px 45px; */ }
+  list-style: none; }
 
 .flex-ul > li {
   flex: 0 1 auto;
-  background-color: #f6f2f2;
-  /*   text-overflow: ellipsis; */
+  background-color: white;
+  border: 2px solid #ccc;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
   margin: 8px;
-  padding: 5px;
-  box-shadow: 10px 10px 5px #888888; }
+  padding: 5px; }
+
+#map {
+  height: 90%; }
 
 /* info window */
 #iw #iw_header {
@@ -81,12 +76,12 @@ html, body {
   /*  border: 1px solid rgba(72, 181, 233, 0.6); */
   /*   border-radius: 2px 2px 10px 10px; */ }
 
-.switch_view_summary {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 30px;
-  background-color: red; }
+#route_summary_btn {
+  width: 200px;
+  height: 50px;
+  background-color: #757575;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%; }
 
 .navbar-toggle {
   float: left; }

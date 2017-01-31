@@ -148,7 +148,7 @@ function initMap() {
           routeFunction(origin_place_id, destination_place_id, travel_mode,
                 directionsService, directionsDisplay);
 
-          $('#plan_form').hide();
+          setTimeout( hideDiv("form_div"), 4000); 
     });
 
 
@@ -182,6 +182,10 @@ function initMap() {
 
 		
 } // init() close
+
+function hideDiv(divId){
+	$('#'+divId+'').hide();
+}
 
 function transportModes(id, mode) {
       radioButton = document.getElementById(id);

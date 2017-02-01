@@ -12,7 +12,7 @@ var radioButton;
 var listview_btn;
 var route_summary_btn;
 var route_summary;
-
+var top_header;
 var locarray;
 var form;
 
@@ -68,6 +68,10 @@ function closeNav() {
     	document.getElementById("mySidenav").style.width = "0";
     	navopen = false;
     } 
+}
+function changeHeader(header){
+	top_header = document.getElementById("top_header");
+	top_header.innerHTML = header;
 }
 
 
@@ -150,6 +154,7 @@ function initMap() {
                 directionsService, directionsDisplay);
 
           setTimeout( hideDiv("form_div"), 4000); 
+          changeHeader("Pick your stops");
     });
 
 

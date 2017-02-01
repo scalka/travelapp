@@ -7,6 +7,16 @@ $textColor: #37474f;
 $transparentColor: rgba(117, 117, 117, 0.59);
 
 
+.navbar {
+  margin-bottom: 0;
+}
+.top_nav{
+  display: flex;
+  flex-flow: row wrap;
+}
+#top_header {
+  margin: 3px auto;
+}
 
 .sidenav {
     height: 100%;

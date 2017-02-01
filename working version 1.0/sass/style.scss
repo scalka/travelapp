@@ -6,6 +6,11 @@ $lightColor: #f6f2f2 ;
 $textColor: #37474f;
 $transparentColor: rgba(117, 117, 117, 0.59);
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+} 
 
 .navbar {
   margin-bottom: 0;
@@ -54,53 +59,51 @@ $transparentColor: rgba(117, 117, 117, 0.59);
 
 
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-} 
-
-      #form_div {
-        position: absolute;
-        z-index: 99;
-        width: 100%;
-        background-color: $transparentColor;
-      }
-
-      .form_closed {
-        transition: transform 2s;
-        transform: translate(0, -95%);
 
 
-      }
+#form_div {
+  position: absolute;
+  z-index: 99;
+  width: 100%;
+  background-color: $transparentColor;
+}
 
-       .flex-ul {
-          display: flex;
-          flex-flow: column wrap;
-          justify-content: space-around;
+.form_closed {
+  transition: transform 2s;
+  transform: translate(0, -95%);
+}
+.form_opened {
+  transition: transform 2s;
+  transform: translate(0, +95%);
+}
 
-          list-style: none;
+ .flex-ul {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-around;
 
-       }
+    list-style: none;
 
-       .flex-ul > li {
-          flex: 0 1 auto;
-          background-color: white;
-          border:2px solid #ccc; 
-          -webkit-border-radius: 5px;
-          border-radius: 5px;
-          margin: 8px;
-          padding: 5px;
-       }
+ }
 
-      #map {
-        height: calc(100% - 50px);
-        width: 100%;
-        top: 50px;
-        bottom: 0;
-        position: absolute;
-        
-      }
+ .flex-ul > li {
+    flex: 0 1 auto;
+    background-color: white;
+    border:2px solid #ccc; 
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    margin: 8px;
+    padding: 5px;
+ }
+
+#map {
+  height: calc(100% - 50px);
+  width: 100%;
+  top: 50px;
+  bottom: 0;
+  position: absolute;
+  
+}
 
 
 

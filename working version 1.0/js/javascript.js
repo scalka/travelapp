@@ -73,12 +73,16 @@ function changeHeader(header){
 	top_header = document.getElementById("top_header");
 	top_header.innerHTML = header;
 }
-function openForm(){
-	document.getElementById("form_div").classList.add("form_closed");
-}
+
+/*function openForm(){
+	document.getElementById("form_div").classList.add("form_opened");
+	document.getElementById("form_div").classList.remove("form_closed");
+}*/
 function closeForm(){
 	document.getElementById("form_div").classList.add("form_closed");
+/*	document.getElementById("form_div").classList.remove("form_opened");*/
 }
+
 function hideDiv(divId){
 	$('#'+divId+'').hide();
 }

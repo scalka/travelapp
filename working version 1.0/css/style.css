@@ -49,6 +49,10 @@ html, body {
   width: 100%;
   background-color: rgba(117, 117, 117, 0.59); }
 
+.form_closed {
+  transition: transform 2s;
+  transform: translate(0, -95%); }
+
 .flex-ul {
   display: flex;
   flex-flow: column wrap;
@@ -65,7 +69,11 @@ html, body {
   padding: 5px; }
 
 #map {
-  height: 90%; }
+  height: calc(100% - 50px);
+  width: 100%;
+  top: 50px;
+  bottom: 0;
+  position: absolute; }
 
 /* info window */
 #iw #iw_header {

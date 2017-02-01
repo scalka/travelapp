@@ -73,7 +73,15 @@ function changeHeader(header){
 	top_header = document.getElementById("top_header");
 	top_header.innerHTML = header;
 }
-
+function openForm(){
+	document.getElementById("form_div").classList.add("form_closed");
+}
+function closeForm(){
+	document.getElementById("form_div").classList.add("form_closed");
+}
+function hideDiv(divId){
+	$('#'+divId+'').hide();
+}
 
 function initMap() {
 
@@ -153,7 +161,8 @@ function initMap() {
           routeFunction(origin_place_id, destination_place_id, travel_mode,
                 directionsService, directionsDisplay);
 
-          setTimeout( hideDiv("form_div"), 4000); 
+          /*setTimeout( hideDiv("form_div"), 4000); */
+          closeForm();
           changeHeader("Pick your stops");
     });
 
@@ -189,9 +198,7 @@ function initMap() {
 		
 } // init() close
 
-function hideDiv(divId){
-	$('#'+divId+'').hide();
-}
+
 
 function transportModes(id, mode) {
       radioButton = document.getElementById(id);

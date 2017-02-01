@@ -22,6 +22,7 @@
 
   </head>
   <body >
+
     <nav class="navbar navbar-static-top custom-navbar " role="navigation" id="nav">
       <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -33,7 +34,7 @@
     </nav>
 
 
-     <div id="form_div" class="container-fluid center-block">
+     <div id="form_div" class="container-fluid center-block" onclick="closeNav()">
        <form id="plan_form col-sm-12">
 
               <ul class="flex-ul">
@@ -67,7 +68,7 @@
       <button class="control" id="listview_btn">ListView</button> 
     </div>
 
-    <div id="map"></div>
+    <div id="map" onclick="closeNav()"></div>
 
     <div id="switch_view_summary">
       <button type="button" class="btn control" id="route_summary_btn">Summary</button>

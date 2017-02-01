@@ -66,6 +66,7 @@ function openNav() {
 function closeNav() {
     if (navopen = true){
     	document.getElementById("mySidenav").style.width = "0";
+    	navopen = false;
     } 
 }
 

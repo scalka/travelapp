@@ -133,12 +133,100 @@ label, input {
 input[type=radio]:checked + label {
   background-color: #43a047; }
 
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 7.2px 0; }
+
+input[type=range]:focus {
+  outline: none; }
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 2.6px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px transparent, 0px 0px 1px rgba(13, 13, 13, 0);
+  background: #c5c6c8;
+  border-radius: 25px;
+  border: 0px solid #720101; }
+
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 1.4px 1.4px 1px #000000, 0px 0px 1.4px #0d0d0d;
+  border: 0.7px solid rgba(0, 0, 0, 0.25);
+  height: 17px;
+  width: 17px;
+  border-radius: 50px;
+  background: rgba(52, 51, 54, 0.52);
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -7.2px; }
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #efeff0; }
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 2.6px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px transparent, 0px 0px 1px rgba(13, 13, 13, 0);
+  background: #c5c6c8;
+  border-radius: 25px;
+  border: 0px solid #720101; }
+
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1.4px 1.4px 1px #000000, 0px 0px 1.4px #0d0d0d;
+  border: 0.7px solid rgba(0, 0, 0, 0.25);
+  height: 17px;
+  width: 17px;
+  border-radius: 50px;
+  background: rgba(52, 51, 54, 0.52);
+  cursor: pointer; }
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 2.6px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent; }
+
+input[type=range]::-ms-fill-lower {
+  background: #9b9da0;
+  border: 0px solid #720101;
+  border-radius: 50px;
+  box-shadow: 1px 1px 1px transparent, 0px 0px 1px rgba(13, 13, 13, 0); }
+
+input[type=range]::-ms-fill-upper {
+  background: #c5c6c8;
+  border: 0px solid #720101;
+  border-radius: 50px;
+  box-shadow: 1px 1px 1px transparent, 0px 0px 1px rgba(13, 13, 13, 0); }
+
+input[type=range]::-ms-thumb {
+  box-shadow: 1.4px 1.4px 1px #000000, 0px 0px 1.4px #0d0d0d;
+  border: 0.7px solid rgba(0, 0, 0, 0.25);
+  height: 17px;
+  width: 17px;
+  border-radius: 50px;
+  background: rgba(52, 51, 54, 0.52);
+  cursor: pointer;
+  height: 2.6px; }
+
+input[type=range]:focus::-ms-fill-lower {
+  background: #c5c6c8; }
+
+input[type=range]:focus::-ms-fill-upper {
+  background: #efeff0; }
+
 #map {
   height: calc(100% - 50px);
   width: 100%;
   top: 50px;
   bottom: 0;
   position: absolute; }
+
+.modal-content {
+  border-radius: 0; }
 
 /* info window */
 #iw #iw_header {

@@ -57,6 +57,7 @@ var loc = [
 			];
 var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
 var navopen = false;
+var placesResult;
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -166,8 +167,8 @@ function initMap() {
           routeFunction(origin_place_id, destination_place_id, travel_mode,
                 directionsService, directionsDisplay);
 
-          /*setTimeout( hideDiv("form_div"), 4000); */
-          closeForm();
+          setTimeout( hideDiv("form_div"), 4000); 
+
           changeHeader("Pick your stops");
     });
 
@@ -196,7 +197,7 @@ function initMap() {
     listview_btn = document.getElementById("listview_btn");
 	listview_btn.addEventListener('click', function(){
 		console.log("calling list");
-		displayList(locarray);
+		displayList(placesResult);
 		$('#modal_list').modal();
 	});
 
@@ -264,9 +265,10 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
 
 function callback(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
+  	placesResult = results;
     for (var i = 0; i < results.length; i++) {
       var place = results[i];
-      console.log(place);
+      /*console.log(place);*/
       createMarker(results[i]);
     }
   }
@@ -280,26 +282,69 @@ function createMarker(place) {
         });
 
         google.maps.event.addListener(marker, 'click', function() {
-          infowindow.setContent(place.name);
+          infowindow.setContent(infoWindowHtml);
           infowindow.open(map, this);
+		          	var iw = document.getElementById('iw');
+		            var iw_header = document.getElementById('iw_header');
+		            var iw_content = document.getElementById('iw_content');
+		            var iw_text = document.getElementById('iw_text'); // in content div with h2 and p
+		            var iw_heading = document.getElementById('iw_heading');
+		            var iw_paraghraph = document.getElementById('iw_paraghraph');
+		            var iw_image = document.getElementById('iw_image');
+           iw_header.innerHTML = place.name;
+           iw_paraghraph.innerHTML = place.vicinity;
+
+            if (addToRouteBtn){
+                    addToRouteBtn.addEventListener('click', function(){
+                    //flag to check if waypoints is already added to the route
+                    var exists = false;
+                    //marker position 
+                    var markerLat = marker.getPosition().lat();
+                    var markerLng = marker.getPosition().lng();
+                    // for loop to check if marker's position is already added to the route
+                    for (var i = 0; i < waypoints.length; i++){
+                      //checking lat and lng of all the waypoints if they are the same as marker
+                      var waypointLat = waypoints[i].location.lat();
+                      var waypointLng = waypoints[i].location.lng();
+                      if (markerLat == waypointLat && markerLng == waypointLng){
+                        exists = true; // change flag 
+                        console.log("this stop is already included");
+                      } 
+                    }
+                    // if flag = true stop is not duplicated if its false stop is added to the route
+                    if (exists == false ){
+                      waypoints.push({
+                        location: marker.position,
+                        stopover: true
+                      });
+                      infowindow.close();
+                      console.log("rerouting with waypoints: " + waypoints);
+                          routeFunction(origin_place_id, destination_place_id, travel_mode, 
+                              directionsService, directionsDisplay, waypoints );
+                        } // if exists end
+                      });  // if add to route end
+                } else {
+                      console.log("btn null");
+                }
+
         });
-      }
+}
 
 //displaying markers near the polygon
-function displayMarkers(locarray){
+function displayMarkers(place){
 	var marker = [];
 	var content;
 	var latlongset;
 	infowindow = new google.maps.InfoWindow();
 	// TODO click button set flag for added to route 
-	for (var i=0; i < locarray.length; i++){
+/*	for (var i=0; i < locarray.length; i++){
 		latlongset = new google.maps.LatLng(locarray[i][0], locarray[i][1]);
 		marker = new google.maps.Marker({
 			    position: latlongset,
 			    map: map,
 			    title: locarray[i][4],
 			    id: locarray[i][2]
-	 	});
+	 	});*/
 		
 		google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
 		    return function() {
@@ -315,7 +360,7 @@ function displayMarkers(locarray){
 				var iw_paraghraph = document.getElementById('iw_paraghraph');
 				var iw_image = document.getElementById('iw_image');
 
-		    	iw_header.innerHTML = marker.title;
+		    	iw_header.innerHTML = marker.name;
 		    	iw_paraghraph.innerHTML = marker.position;
 		        var addToRouteBtn = document.getElementById("addToRouteBtn");	    
 		        if (addToRouteBtn){
@@ -352,21 +397,18 @@ function displayMarkers(locarray){
 				}
 		    };
 		})(marker,content,infowindow));  // close google.maps.event.addListener
-	} // closing for loop
+/*	} // closing for loop*/
 } // closing displayMarkers function
 
-function displayList(locarray){
+function displayList(placesResult){
 
 	var listview = document.getElementById('listview');
-	
-
 	listview.innerHTML = '';
-
-	for (var i=0; i < locarray.length; i++){
-		var place_name = locarray[i][4];
+console.log(placesResult);
+	for (var i=0; i < placesResult.length; i++){
+		var place_name = placesResult[i].name;
 		var place_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum";
 		listview.innerHTML += '<div class="card" > <img src="http://placehold.it/350x150" class="img-thumbnail" alt="image" width="304" height="236">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + place_description + '</p> <a href="#" class="btn btn-primary">Add</a> </div> </div>'
-
 
 	}
 }	

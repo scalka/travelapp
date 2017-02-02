@@ -58,6 +58,8 @@ var loc = [
 var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
 var navopen = false;
 var placesResult = [];
+var total_distance = 0;
+var distance;
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -176,19 +178,23 @@ function initMap() {
 
     route_summary_btn = document.getElementById("route_summary_btn");
 	route_summary = document.getElementById('route_summary');
+	distance = document.getElementById('distance');
 
 	route_summary_btn.addEventListener('click', function(){     
-      route_summary.innerHTML = '';
-		for (var i = 0; i < route.legs.length; i++) {
-          var routeSegment = i + 1;
-          route_summary .innerHTML += '<b>Route Segment: ' + routeSegment +
-              '</b><br>';
-          route_summary.innerHTML += route.legs[i].start_address + ' to ';
-          route_summary.innerHTML += route.legs[i].end_address + '<br>';
-          route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
-        }
-        console.log(route_summary);
-        $('#modal_summary').modal();
+		    route_summary.innerHTML = '';
+				for (var i = 0; i < route.legs.length; i++) {
+		          var routeSegment = i + 1;
+		          route_summary .innerHTML += '<b>Route Segment: ' + routeSegment +
+		              '</b><br>';
+		          route_summary.innerHTML += route.legs[i].start_address + ' to ';
+		          route_summary.innerHTML += route.legs[i].end_address + '<br>';
+		          route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
+		          total_distance = total_distance + route.legs[i].distance.value ;
+		        }
+		        var  total_distance_km = (total_distance/1000).toFixed(1) ;
+		        distance.innerHTML = total_distance_km + " km";
+
+		        $('#modal_summary').modal();
 
     }); // end event listener
 

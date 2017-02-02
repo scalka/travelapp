@@ -57,7 +57,7 @@ var loc = [
 			];
 var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
 var navopen = false;
-var placesResult;
+var placesResult = [];
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -404,12 +404,26 @@ function displayList(placesResult){
 
 	var listview = document.getElementById('listview');
 	listview.innerHTML = '';
+
 console.log(placesResult);
+
 	for (var i=0; i < placesResult.length; i++){
 		var place_name = placesResult[i].name;
 		var place_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum";
-		listview.innerHTML += '<div class="card" > <img src="http://placehold.it/350x150" class="img-thumbnail" alt="image" width="304" height="236">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + place_description + '</p> <a href="#" class="btn btn-primary">Add</a> </div> </div>'
+	
+		
+		
+		if (  placesResult[i].photos != null ) {
+			console.log("url");
+			var photo_url = placesResult[i].photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100});
+		} else  {
+			var photo_url = "ssdds";
+			console.log("no");
+		}
 
+
+		listview.innerHTML += '<div class="card" > <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + place_description + '</p> <a href="#" class="btn btn-primary">Add</a> </div> </div>'
+		
 	}
 }	
 

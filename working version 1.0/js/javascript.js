@@ -15,7 +15,7 @@ var route_summary;
 var top_header;
 var locarray;
 var form;
-
+var servicePlaces;
 var waypoints = [];
 var origin_place_id = null;
 var destination_place_id = null;
@@ -98,6 +98,7 @@ function initMap() {
     directionsService = new google.maps.DirectionsService;
     directionsDisplay = new google.maps.DirectionsRenderer;
     directionsDisplay.setMap(map);
+    servicePlaces = new google.maps.places.PlacesService(map);
 
 	origin_input = document.getElementById('origin-input');
     destination_input = document.getElementById('destination-input');
@@ -239,6 +240,18 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
 			  	locarray.push(loc[i]);
 			  } 
 		  }
+
+		  var request = {
+		  	bounds: route.bounds,
+		  	radius: '500',
+		  	types: ['store']
+		  };
+		  servicePlaces.nearbySearch(request, callback);
+
+
+
+
+
 		  displayMarkers(locarray);
         } else {
               window.alert('Directions request failed due to ' + status);
@@ -246,6 +259,31 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
         
  		});
 } // end of route()
+
+
+
+function callback(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      var place = results[i];
+      console.log(place);
+      createMarker(results[i]);
+    }
+  }
+}
+
+function createMarker(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
 
 //displaying markers near the polygon
 function displayMarkers(locarray){

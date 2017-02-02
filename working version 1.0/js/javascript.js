@@ -60,6 +60,8 @@ var navopen = false;
 var placesResult = [];
 var total_distance = 0;
 var distance;
+var total_duration = 0;
+var duration;
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -179,6 +181,7 @@ function initMap() {
     route_summary_btn = document.getElementById("route_summary_btn");
 	route_summary = document.getElementById('route_summary');
 	distance = document.getElementById('distance');
+	duration = document.getElementById('duration');
 
 	route_summary_btn.addEventListener('click', function(){     
 		    route_summary.innerHTML = '';
@@ -189,10 +192,14 @@ function initMap() {
 		          route_summary.innerHTML += route.legs[i].start_address + ' to ';
 		          route_summary.innerHTML += route.legs[i].end_address + '<br>';
 		          route_summary.innerHTML += route.legs[i].distance.text + '<br><br>';
-		          total_distance = total_distance + route.legs[i].distance.value ;
+		          total_distance = total_distance + route.legs[i].distance.value ; // distance in meters
+		          total_duration = total_duration + route.legs[i].duration.value ; // indicates the duration in seconds.
 		        }
 		        var  total_distance_km = (total_distance/1000).toFixed(1) ;
+		        var total_duration_h = (total_duration/3600).toFixed(2);
 		        distance.innerHTML = total_distance_km + " km";
+		        duration.innerHTML = total_duration_h + " h";
+		        console.log(total_duration);
 
 		        $('#modal_summary').modal();
 

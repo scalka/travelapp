@@ -29,7 +29,7 @@ var total_distance = 0; // total distance in km
 var distance; // holds distance value 
 var total_duration = 0; // total duration in h
 var duration; // hold distance value
-var radius; // detour distance
+
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -75,15 +75,13 @@ function initMap() {
 
 	origin_input = document.getElementById('origin-input');
     destination_input = document.getElementById('destination-input');
+    
 
     switch_view_control_list = document.getElementById('switch_view_control_list');
     switch_view_summary = document.getElementById('switch_view_summary');
-    plan_button = document.getElementById("plan_button");
 
     form = document.getElementById('plan_form');
-/*    map.controls[google.maps.ControlPosition.TOP_CENTER].push(form);*/
-	
-   /* modes = document.getElementById('mode-selector');*/
+
 	// placing controls on the map
     map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(switch_view_summary);
    	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(switch_view_control_list);
@@ -121,8 +119,7 @@ function initMap() {
           // If the place has a geometry, store its place ID and route if we have
           // the other place ID
           origin_place_id = place.place_id;
-          /*routeFunction(origin_place_id, destination_place_id, travel_mode,
-                directionsService, directionsDisplay);*/
+
     });
 
     destination_autocomplete.addListener('place_changed', function() {
@@ -212,23 +209,16 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
           route = response.routes[0];
           //poliline from the JSON response array
           poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
-/*      OLD APPROACH   
-		 locarray = []; // to be filled if its near
-          for(var i=0; i < loc.length; i++){
-          		markerlatlng = new google.maps.LatLng(loc[i][0], loc[i][1]);
-              	var isLocationNear = google.maps.geometry.poly.isLocationOnEdge(markerlatlng, new google.maps.Polyline({
-				  path: google.maps.geometry.encoding.decodePath(poliline)
-				}), 0.01); // 0.01 is about 1.1km ? 
-			  if (isLocationNear){
-			  	locarray.push(loc[i]);
-			  } 
-		  }*/
+
+		  //radius - Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters
+		  var radius = document.getElementById('detour_range').value;
 
 		  var request = {
 		  	bounds: route.bounds,
-		  	radius: '500',
+		  	radius: radius,
 		  	types: ['natural_feature', 'point_of_interest','art_gallery', 'museum', 'amusement_park', 'park', 'stadium']
 		  };
+    		console.log("radius"+radius);
 		  servicePlaces.nearbySearch(request, callback);
 
 		  displayMarkers(locarray);
@@ -246,7 +236,6 @@ function callback(results, status) {
   	placesResult = results;
     for (var i = 0; i < results.length; i++) {
       var place = results[i];
-      /*console.log(place);*/
       createMarker(results[i]);
     }
   }
@@ -259,7 +248,7 @@ function createMarker(place) {
           position: place.geometry.location,
           
         });
-        console.log(place);
+        /*console.log(place);*/
         google.maps.event.addListener(marker, 'click', function() {
           infowindow.setContent(infoWindowHtml);
           infowindow.open(map, this);
@@ -314,17 +303,7 @@ function displayMarkers(place){
 	var marker = [];
 	var content;
 	var latlongset;
-	infowindow = new google.maps.InfoWindow();
-	// TODO click button set flag for added to route 
-/*	for (var i=0; i < locarray.length; i++){
-		latlongset = new google.maps.LatLng(locarray[i][0], locarray[i][1]);
-		marker = new google.maps.Marker({
-			    position: latlongset,
-			    map: map,
-			    title: locarray[i][4],
-			    id: locarray[i][2]
-	 	});*/
-		
+	infowindow = new google.maps.InfoWindow();		
 		google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
 		    return function() {
 		    	infowindow.setContent(infoWindowHtml);
@@ -405,23 +384,3 @@ console.log(placesResult);
 		
 	}
 }	
-
-
-/*
-function displayList(locarray){
-
-	var listview = document.getElementById('listview');
-	var place_name = document.getElementById('place_name');
-	var place_description = document.getElementById('place_description');
-
-	listview.innerHTML = '';
-	for (var i=0; i < locarray.length; i++){
-		console.log("num of markers: " + locarray.length);
-		listview.innerHTML += cardHTML;
-		place_name.innerHTML = locarray[i][4];
-	}
-
-}	
-
-*/
-

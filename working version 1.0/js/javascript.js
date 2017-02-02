@@ -1,67 +1,35 @@
-var map;
-var origin_input;
-var destination_input;
-var bottom_controls;
-var switch_view_control_list;
-var switch_view_summary;
-var modes;
+var map; 
+var origin_input; // start
 var origin_autocomplete;
+var destination_input; // destination
 var destination_autocomplete;
-var route;
-var radioButton;
+var switch_view_control_list; // div for listview button
 var listview_btn;
+var switch_view_summary; // div for summary btn
 var route_summary_btn;
 var route_summary;
-var top_header;
-var locarray;
+var route; // hold the route
+var radioButton; // checked radioButton
+var top_header; // heading on top of page
+var locarray; 
 var form;
-var servicePlaces;
-var waypoints = [];
+var waypoints = []; // holds the waypoints
 var origin_place_id = null;
 var destination_place_id = null;
 var travel_mode = 'WALKING';
-var directionsService;
-var directionsDisplay;
-var poliline;
+var servicePlaces; // google places
+var directionsService; // google directions service
+var directionsDisplay; // google directions service
+var poliline; //bounds
 var infowindow;
-var loc = [
-					     [53.345295, -6.263868, "1", false, "Temple Bar"],
-					     [53.355863, -6.329631, "2", false, "Pheonix Park"],
-					     [53.343864, -6.254808, "3", false, "Trinity College"],
-					     [53.342918, -6.267225, "4", false, "Dublin Castle"],
-					     [53.338490, -6.259569, "5", false, "St. Stephen's Green"],
-					     [53.343762, -6.260564, "6", false, "Molly Malone Statue"],
-					     [53.305325, -6.220729, "7", false, "UCD"],
-					     [53.314016, -6.218270, "8", false, "Elm Park Golf & Sports Club"],
-					     [53.325886, -6.230117, "9", false, "RDS"],
-					     [53.335281, -6.225468, "11", false, "Aviva Stadium"],
-                        [53.344287, -6.239945, "12", false, "Bord Gáis Energy Theatre"],
-                        [53.349648, -6.207791, "13", false, "Dublin Port"],
-					     [53.364326, -6.206327, "14", false, "Clontarf Castle"],
-
-					     [53.372417, -6.278448, "15", false, "National Botanic Gardens"],
-					     [53.364326, -6.206327, "16", false, "Clontarf Castle"],
-					     [53.387373, -6.256976, "17", false, "DCU"],
-					     [53.388309, -6.066769, "18", false, "Howth"],
-					     [53.356234, -6.306160, "19", false, "Dublin ZOO"],
-					     [53.364326, -6.206327, "20", false, "IADT"],
-					     [53.295164, -6.133847, "21", false, "Dún Laoghaire "],
-					     [53.308122, -6.302724, "22", false, "Stop no _"],
-					     [53.364320, -6.206927, "23", false, "Stop no _ "],
-					     [53.364326, -6.206127, "24", false, "Stop no _ "],
-					     [53.364326, -6.206327, "25", false, "Stop no _ "],
-					     [53.342139, -6.286251, "26", false, "Stop no _ "],
-					     [53.298926, -6.132908, "27", false, "Stop no _ "],
-					     [53.339913, -6.271316, "28", false, "Stop no _ "],
-					     [53.287659, -6.242560, "29", false, "Dundrum"]
-			];
 var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
-var navopen = false;
-var placesResult = [];
-var total_distance = 0;
-var distance;
-var total_duration = 0;
-var duration;
+var navopen = false; 
+var placesResult = []; // all places near the route
+var total_distance = 0; // total distance in km
+var distance; // holds distance value 
+var total_duration = 0; // total duration in h
+var duration; // hold distance value
+var radius; // detour distance
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -244,7 +212,8 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
           route = response.routes[0];
           //poliline from the JSON response array
           poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
-          locarray = []; // to be filled if its near
+/*      OLD APPROACH   
+		 locarray = []; // to be filled if its near
           for(var i=0; i < loc.length; i++){
           		markerlatlng = new google.maps.LatLng(loc[i][0], loc[i][1]);
               	var isLocationNear = google.maps.geometry.poly.isLocationOnEdge(markerlatlng, new google.maps.Polyline({
@@ -253,18 +222,14 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
 			  if (isLocationNear){
 			  	locarray.push(loc[i]);
 			  } 
-		  }
+		  }*/
 
 		  var request = {
 		  	bounds: route.bounds,
 		  	radius: '500',
-		  	types: ['store']
+		  	types: ['natural_feature', 'point_of_interest','art_gallery', 'museum', 'amusement_park', 'park', 'stadium']
 		  };
 		  servicePlaces.nearbySearch(request, callback);
-
-
-
-
 
 		  displayMarkers(locarray);
         } else {
@@ -291,9 +256,10 @@ function createMarker(place) {
         var placeLoc = place.geometry.location;
         var marker = new google.maps.Marker({
           map: map,
-          position: place.geometry.location
+          position: place.geometry.location,
+          
         });
-
+        console.log(place);
         google.maps.event.addListener(marker, 'click', function() {
           infowindow.setContent(infoWindowHtml);
           infowindow.open(map, this);

@@ -60,6 +60,16 @@ function hideDiv(divId){
 	$('#'+divId+'').hide();
 }
 
+function plan() {
+	
+	  routeFunction(origin_place_id, destination_place_id, travel_mode,
+	        directionsService, directionsDisplay);
+
+	  setTimeout( hideDiv("form_div"), 4000); 
+
+	  changeHeader("Pick your stops");	
+}
+
 function initMap() {
 
 
@@ -133,12 +143,6 @@ function initMap() {
           // If the place has a geometry, store its place ID and route if we have
           // the other place ID
           destination_place_id = place.place_id;
-          routeFunction(origin_place_id, destination_place_id, travel_mode,
-                directionsService, directionsDisplay);
-
-          setTimeout( hideDiv("form_div"), 4000); 
-
-          changeHeader("Pick your stops");
     });
 
 
@@ -209,16 +213,13 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
           route = response.routes[0];
           //poliline from the JSON response array
           poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
-
+          extendBounds(route.bounds);
 		  //radius - Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters
 		  var radius = document.getElementById('detour_range').value;
-
 		  var request = {
 		  	bounds: route.bounds,
-		  	radius: radius,
 		  	types: ['natural_feature', 'point_of_interest','art_gallery', 'museum', 'amusement_park', 'park', 'stadium']
 		  };
-    		console.log("radius"+radius);
 		  servicePlaces.nearbySearch(request, callback);
 
 		  displayMarkers(locarray);
@@ -229,17 +230,55 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
  		});
 } // end of route()
 
+function extendBounds(bounds){
+	console.log(bounds);
+	console.log(bounds.getNorthEast());
+	console.log(bounds.getSouthWest());
+}
 
-
-function callback(results, status) {
+function callback(results, status, pagination) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
   	placesResult = results;
-    for (var i = 0; i < results.length; i++) {
-      var place = results[i];
-      createMarker(results[i]);
-    }
+  
+/* TODO  
+  if (pagination.hasNextPage) {
+   	//each nextPage is a new request 	
+      var moreButton = document.getElementById('more');
+      moreButton.disabled = false;
+
+      moreButton.addEventListener('click', function() {
+        moreButton.disabled = true;
+        pagination.nextPage();
+      });
+      pagination.nextPage();
+    }*/
+    // get details about place      
+      for (var i = 0; i < results.length; i++) {
+	    	var place = results[i];
+
+	        var detailsRequest = {
+	        	placeId: place.place_id
+	        }
+
+/*	        //does not give too much detail
+		    servicePlaces.getDetails(detailsRequest, call);*/
+	     	createMarker(results[i]);
+        	console.log("results" + results.length);
+    	}
+
+
+  } else {
+  	window.alert('Directions request failed due to ' + status);
   }
 }
+
+function call() {
+	if (status == google.maps.places.PlacesServiceStatus.OK) {
+	    console.log("details");
+	  } else {
+	  	console.log("Error");
+	  }
+	}
 
 function createMarker(place) {
         var placeLoc = place.geometry.location;
@@ -248,6 +287,7 @@ function createMarker(place) {
           position: place.geometry.location,
           
         });
+
         /*console.log(place);*/
         google.maps.event.addListener(marker, 'click', function() {
           infowindow.setContent(infoWindowHtml);
@@ -260,7 +300,10 @@ function createMarker(place) {
 		            var iw_paraghraph = document.getElementById('iw_paraghraph');
 		            var iw_image = document.getElementById('iw_image');
            iw_header.innerHTML = place.name;
+           iw_text.innerHTML = "Types: " + place.types;
+           iw_content.innerHTML = "Opening hours: " + place.opening_hours;
            iw_paraghraph.innerHTML = place.vicinity;
+
 
             if (addToRouteBtn){
                     addToRouteBtn.addEventListener('click', function(){
@@ -367,10 +410,8 @@ console.log(placesResult);
 
 	for (var i=0; i < placesResult.length; i++){
 		var place_name = placesResult[i].name;
-		var place_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum";
-	
-		
-		
+		/*var place_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum";
+	*/	
 		if (  placesResult[i].photos != null ) {
 			console.log("url");
 			var photo_url = placesResult[i].photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100});
@@ -380,7 +421,7 @@ console.log(placesResult);
 		}
 
 
-		listview.innerHTML += '<div class="card" > <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + place_description + '</p> <a href="#" class="btn btn-primary">Add</a> </div> </div>'
+		listview.innerHTML += '<div class="card" > <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + place_description + '</p> <a href="#" class="btn btn-primary" onclick="" >Add</a> </div> </div>'
 		
 	}
 }	

@@ -8,6 +8,8 @@ var listview_btn;
 var switch_view_summary; // div for summary btn
 var route_summary_btn;
 var route_summary;
+var addToRoute_listview;
+
 var route; // hold the route
 var radioButton; // checked radioButton
 var top_header; // heading on top of page
@@ -23,12 +25,15 @@ var directionsDisplay; // google directions service
 var poliline; //bounds
 var infowindow;
 var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
+var listObject = '<button id"addBtn">';
+
 var navopen = false; 
 var placesResult = []; // all places near the route
 var total_distance = 0; // total distance in km
 var distance; // holds distance value 
 var total_duration = 0; // total duration in h
 var duration; // hold distance value
+var listview;
 
 
 function openNav() {
@@ -61,18 +66,15 @@ function hideDiv(divId){
 }
 
 function plan() {
-	
-	  routeFunction(origin_place_id, destination_place_id, travel_mode,
-	        directionsService, directionsDisplay);
+	routeFunction(origin_place_id, destination_place_id, travel_mode,
+		directionsService, directionsDisplay);
 
-	  setTimeout( hideDiv("form_div"), 4000); 
+	setTimeout( hideDiv("form_div"), 4000); 
 
-	  changeHeader("Pick your stops");	
+	changeHeader("Pick your stops");	
 }
 
 function initMap() {
-
-
     map = new google.maps.Map(document.getElementById('map'), {
           mapTypeControl: false,
           center: {lat: 53.3441, lng: -6.2675},
@@ -86,7 +88,6 @@ function initMap() {
 	origin_input = document.getElementById('origin-input');
     destination_input = document.getElementById('destination-input');
     
-
     switch_view_control_list = document.getElementById('switch_view_control_list');
     switch_view_summary = document.getElementById('switch_view_summary');
 
@@ -145,8 +146,6 @@ function initMap() {
           destination_place_id = place.place_id;
     });
 
-
-
     route_summary_btn = document.getElementById("route_summary_btn");
 	route_summary = document.getElementById('route_summary');
 	h3_travel_mode = document.getElementById('h3_travel_mode');
@@ -170,22 +169,17 @@ function initMap() {
 		        h3_travel_mode.innerHTML = travel_mode;
 		        distance.innerHTML = total_distance_km + " km";
 		        duration.innerHTML = total_duration_h + " h";
-		        console.log(total_duration);
 
 		        $('#modal_summary').modal();
 
     }); // end event listener
 
-
-
     listview_btn = document.getElementById("listview_btn");
 	listview_btn.addEventListener('click', function(){
-		console.log("calling list");
-		displayList(placesResult);
+		//displayList(placesResult);
 		$('#modal_list').modal();
 	});
 
-		
 } // init() close
 
 
@@ -199,9 +193,9 @@ function transportModes(id, mode) {
 
 function routeFunction(origin_place_id, destination_place_id, travel_mode,
                    directionsService, directionsDisplay, waypoints) {      	
-      if (!origin_place_id || !destination_place_id) {
-        return;
-      }
+	  if (!origin_place_id || !destination_place_id) {
+	    return;
+	  }
 	directionsService.route({
         origin: {'placeId': origin_place_id},
         destination: {'placeId': destination_place_id},
@@ -223,19 +217,17 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
 		  	types: ['natural_feature','art_gallery', 'museum', 'amusement_park', 'park', 'stadium']
 		  };
 		  servicePlaces.nearbySearch(request, callback);
-
-		  displayMarkers(locarray);
         } else {
-              window.alert('Directions request failed due to ' + status);
+            window.alert('Directions request failed due to ' + status);
         }
         
  		});
 } // end of route()
 
 function extendBounds(bounds){
-	console.log(bounds);
+	/*console.log(bounds);
 	console.log(bounds.getNorthEast());
-	console.log(bounds.getSouthWest());
+	console.log(bounds.getSouthWest());*/
 }
 
 function callback(results, status, pagination) {
@@ -254,25 +246,43 @@ function callback(results, status, pagination) {
       });
 /*      pagination.nextPage();*/
     }
-    // get details about place      
+    // get details about place  
+
       for (var i = 0; i < results.length; i++) {
 	    	var place = results[i];
-
 	        var detailsRequest = {
 	        	placeId: place.place_id
 	        }
-
 /*	        //does not give too much detail
 		    servicePlaces.getDetails(detailsRequest, call);*/
 	     	createMarker(results[i]);
-        	console.log("results" + results.length);
+	     	displayList(results[i]);
+	     	}
     	}
 
-
-  } else {
-  	window.alert('Directions request failed due to ' + status);
-  }
 }
+
+function displayList(place){
+
+	 listview = document.getElementById('listview');
+	var place_name = place.name;
+	/*var place_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum";
+*/	
+
+	/*var position = place.geometry.location; 
+    var placeLat = place.geometry.location.lat();
+    var placeLng = place.geometry.location.lng();
+	var placeArray = [position, placeLat, placeLng];*/
+	if ( place.photos != null ) {
+		var photo_url = place.photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100});
+	} else  {
+		var photo_url = "ssdds";
+	}
+
+	listview.innerHTML += '<div class="card"> <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' +  ' </div> </div>';
+
+
+}	
 
 function call() {
 	if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -281,16 +291,15 @@ function call() {
 	  	console.log("Error");
 	  }
 	}
-
+//called in callback()
 function createMarker(place) {
+		console.log("createMarker");
         var placeLoc = place.geometry.location;
         var marker = new google.maps.Marker({
           map: map,
           position: place.geometry.location,
-          
         });
-
-        /*console.log(place);*/
+        infowindow = new google.maps.InfoWindow();	
         google.maps.event.addListener(marker, 'click', function() {
           infowindow.setContent(infoWindowHtml);
           infowindow.open(map, this);
@@ -306,30 +315,29 @@ function createMarker(place) {
            iw_content.innerHTML = "Opening hours: " + place.opening_hours;
            iw_paraghraph.innerHTML = place.vicinity;
 
-
             if (addToRouteBtn){
             	addToRouteBtn.addEventListener('click', function(){
-            		addToRoute(marker);
+            		addToRoute(place);
             	} );  // if add to route end
             } else {
                console.log("btn null");
             }
-
         });
 }
 
-function addToRoute(marker){
+function addToRoute(place) {
+	var position = place.geometry.location; 
+   var placeLat = place.geometry.location.lat();
+   var placeLng = place.geometry.location.lng();
     //flag to check if waypoints is already added to the route
     var exists = false;
-    //marker position 
-    var markerLat = marker.getPosition().lat();
-    var markerLng = marker.getPosition().lng();
+   console.log(waypoints);
     // for loop to check if marker's position is already added to the route
     for (var i = 0; i < waypoints.length; i++){
       //checking lat and lng of all the waypoints if they are the same as marker
       var waypointLat = waypoints[i].location.lat();
       var waypointLng = waypoints[i].location.lng();
-      if (markerLat == waypointLat && markerLng == waypointLng){
+      if (placeLat == waypointLat && placeLng == waypointLng){
         exists = true; // change flag 
         console.log("this stop is already included");
       } 
@@ -337,7 +345,7 @@ function addToRoute(marker){
     // if flag = true stop is not duplicated if its false stop is added to the route
     if (exists == false ){
       waypoints.push({
-        location: marker.position,
+        location: position,
         stopover: true
       });
       infowindow.close();
@@ -347,89 +355,7 @@ function addToRoute(marker){
         } // if exists end
 };  // if add to route end
 
-
-
-//displaying markers near the polygon
-function displayMarkers(place){
-	var marker = [];
-	var content;
-	var latlongset;
-	infowindow = new google.maps.InfoWindow();		
-		google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
-		    return function() {
-		    	infowindow.setContent(infoWindowHtml);
-		    	console.log(infowindow);
-		        //infowindow.setContent(content + '<button type="button" id="addToRouteBtn">Click</button>');
-		        infowindow.open(map,marker);
-		        var iw = document.getElementById('iw');
-				var iw_header = document.getElementById('iw_header');
-				var iw_content = document.getElementById('iw_content');
-				var iw_text = document.getElementById('iw_text'); // in content div with h2 and p
-				var iw_heading = document.getElementById('iw_heading');
-				var iw_paraghraph = document.getElementById('iw_paraghraph');
-				var iw_image = document.getElementById('iw_image');
-
-		    	iw_header.innerHTML = marker.name;
-		    	iw_paraghraph.innerHTML = marker.position;
-		        var addToRouteBtn = document.getElementById("addToRouteBtn");	    
-		        if (addToRouteBtn){
-					addToRouteBtn.addEventListener('click', function(){
-						//flag to check if waypoints is already added to the route
-						var exists = false;
-						//marker position 
-						var markerLat = marker.getPosition().lat();
-						var markerLng = marker.getPosition().lng();
-						// for loop to check if marker's position is already added to the route
-						for (var i = 0; i < waypoints.length; i++){
-							//checking lat and lng of all the waypoints if they are the same as marker
-							var waypointLat = waypoints[i].location.lat();
-							var waypointLng = waypoints[i].location.lng();
-							if (markerLat == waypointLat && markerLng == waypointLng){
-								exists = true; // change flag 
-								console.log("this stop is already included");
-							} 
-						}
-						// if flag = true stop is not duplicated if its false stop is added to the route
-						if (exists == false ){
-							waypoints.push({
-								location: marker.position,
-								stopover: true
-							});
-							infowindow.close();
-							console.log("rerouting with waypoints: " + waypoints);
-					      	routeFunction(origin_place_id, destination_place_id, travel_mode, 
-					            directionsService, directionsDisplay, waypoints );
-						} // if exists end
-					});	 // if add to route end
-				} else {
-					console.log("btn null");
-				}
-		    };
-		})(marker,content,infowindow));  // close google.maps.event.addListener
-/*	} // closing for loop*/
-} // closing displayMarkers function
-
-function displayList(placesResult){
-
-	var listview = document.getElementById('listview');
-	listview.innerHTML = '';
-
-console.log(placesResult);
-
-	for (var i=0; i < placesResult.length; i++){
-		var place_name = placesResult[i].name;
-		/*var place_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum";
-	*/	
-		if (  placesResult[i].photos != null ) {
-			console.log("url");
-			var photo_url = placesResult[i].photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100});
-		} else  {
-			var photo_url = "ssdds";
-			console.log("no");
-		}
-
-
-		listview.innerHTML += '<div class="card" > <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + /*place_description */  '</p> <a href="#" class="btn btn-primary" onclick="" >Add</a> </div> </div>'
-		
-	}
-}	
+function addToRouteFromList(placeObject){
+	console.log(placeObject.position);
+	addToRoute();
+}

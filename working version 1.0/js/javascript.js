@@ -218,7 +218,7 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
 		  var radius = document.getElementById('detour_range').value;
 		  var request = {
 		  	bounds: route.bounds,
-		  	types: ['natural_feature', 'point_of_interest','art_gallery', 'museum', 'amusement_park', 'park', 'stadium']
+		  	types: ['natural_feature','art_gallery', 'museum', 'amusement_park', 'park', 'stadium']
 		  };
 		  servicePlaces.nearbySearch(request, callback);
 
@@ -240,18 +240,18 @@ function callback(results, status, pagination) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
   	placesResult = results;
   
-/* TODO  
+/* TODO  */
   if (pagination.hasNextPage) {
    	//each nextPage is a new request 	
       var moreButton = document.getElementById('more');
       moreButton.disabled = false;
 
       moreButton.addEventListener('click', function() {
-        moreButton.disabled = true;
+        //moreButton.disabled = true;
         pagination.nextPage();
       });
-      pagination.nextPage();
-    }*/
+/*      pagination.nextPage();*/
+    }
     // get details about place      
       for (var i = 0; i < results.length; i++) {
 	    	var place = results[i];
@@ -421,7 +421,7 @@ console.log(placesResult);
 		}
 
 
-		listview.innerHTML += '<div class="card" > <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + place_description + '</p> <a href="#" class="btn btn-primary" onclick="" >Add</a> </div> </div>'
+		listview.innerHTML += '<div class="card" > <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + /*place_description */+ '</p> <a href="#" class="btn btn-primary" onclick="" >Add</a> </div> </div>'
 		
 	}
 }	

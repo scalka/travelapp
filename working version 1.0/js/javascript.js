@@ -149,6 +149,7 @@ function initMap() {
 
     route_summary_btn = document.getElementById("route_summary_btn");
 	route_summary = document.getElementById('route_summary');
+	h3_travel_mode = document.getElementById('h3_travel_mode');
 	distance = document.getElementById('distance');
 	duration = document.getElementById('duration');
 
@@ -166,6 +167,7 @@ function initMap() {
 		        }
 		        var  total_distance_km = (total_distance/1000).toFixed(1) ;
 		        var total_duration_h = (total_duration/3600).toFixed(2);
+		        h3_travel_mode.innerHTML = travel_mode;
 		        distance.innerHTML = total_distance_km + " km";
 		        duration.innerHTML = total_duration_h + " h";
 		        console.log(total_duration);
@@ -306,40 +308,46 @@ function createMarker(place) {
 
 
             if (addToRouteBtn){
-                    addToRouteBtn.addEventListener('click', function(){
-                    //flag to check if waypoints is already added to the route
-                    var exists = false;
-                    //marker position 
-                    var markerLat = marker.getPosition().lat();
-                    var markerLng = marker.getPosition().lng();
-                    // for loop to check if marker's position is already added to the route
-                    for (var i = 0; i < waypoints.length; i++){
-                      //checking lat and lng of all the waypoints if they are the same as marker
-                      var waypointLat = waypoints[i].location.lat();
-                      var waypointLng = waypoints[i].location.lng();
-                      if (markerLat == waypointLat && markerLng == waypointLng){
-                        exists = true; // change flag 
-                        console.log("this stop is already included");
-                      } 
-                    }
-                    // if flag = true stop is not duplicated if its false stop is added to the route
-                    if (exists == false ){
-                      waypoints.push({
-                        location: marker.position,
-                        stopover: true
-                      });
-                      infowindow.close();
-                      console.log("rerouting with waypoints: " + waypoints);
-                          routeFunction(origin_place_id, destination_place_id, travel_mode, 
-                              directionsService, directionsDisplay, waypoints );
-                        } // if exists end
-                      });  // if add to route end
-                } else {
-                      console.log("btn null");
-                }
+            	addToRouteBtn.addEventListener('click', function(){
+            		addToRoute(marker);
+            	} );  // if add to route end
+            } else {
+               console.log("btn null");
+            }
 
         });
 }
+
+function addToRoute(marker){
+    //flag to check if waypoints is already added to the route
+    var exists = false;
+    //marker position 
+    var markerLat = marker.getPosition().lat();
+    var markerLng = marker.getPosition().lng();
+    // for loop to check if marker's position is already added to the route
+    for (var i = 0; i < waypoints.length; i++){
+      //checking lat and lng of all the waypoints if they are the same as marker
+      var waypointLat = waypoints[i].location.lat();
+      var waypointLng = waypoints[i].location.lng();
+      if (markerLat == waypointLat && markerLng == waypointLng){
+        exists = true; // change flag 
+        console.log("this stop is already included");
+      } 
+    }
+    // if flag = true stop is not duplicated if its false stop is added to the route
+    if (exists == false ){
+      waypoints.push({
+        location: marker.position,
+        stopover: true
+      });
+      infowindow.close();
+      console.log("rerouting with waypoints: " + waypoints);
+          routeFunction(origin_place_id, destination_place_id, travel_mode, 
+              directionsService, directionsDisplay, waypoints );
+        } // if exists end
+};  // if add to route end
+
+
 
 //displaying markers near the polygon
 function displayMarkers(place){
@@ -421,7 +429,7 @@ console.log(placesResult);
 		}
 
 
-		listview.innerHTML += '<div class="card" > <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + /*place_description */+ '</p> <a href="#" class="btn btn-primary" onclick="" >Add</a> </div> </div>'
+		listview.innerHTML += '<div class="card" > <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' + /*place_description */  '</p> <a href="#" class="btn btn-primary" onclick="" >Add</a> </div> </div>'
 		
 	}
 }	

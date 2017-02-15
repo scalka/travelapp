@@ -223,10 +223,48 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
           poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
           //extendBounds(route.bounds);
 
+var ne = route.bounds.getNorthEast();
+var sw = route.bounds.getSouthWest();
+
+
+
+
+var triangleCoords = [
+    {lat: ne.lat(), lng: ne.lng()},
+    {lat: ne.lat(), lng: sw.lng()},
+
+    {lat: sw.lat(), lng: sw.lng()},
+    {lat: sw.lat(), lng: ne.lng()}
+  ];
+
+// Construct the polygon.
+  var bermudaTriangle = new google.maps.Polygon({
+    paths: triangleCoords,
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35
+  });
+  bermudaTriangle.setMap(map);
+
+
+
+
+
+
+
+var loclat = route.bounds.getCenter().lat();
+var loclng = route.bounds.getCenter().lng()
+
+
 		  var request = {
-		  	bounds: route.bounds,
+		  	//bounds: route.bounds,
+		  	location: {lat: loclat, lng: loclng},
+		  	radius: '10000',
 		  	types: ['natural_feature','art_gallery', 'museum', 'amusement_park', 'park', 'stadium']
 		  };
+		  console.log(request);
 		  servicePlaces.nearbySearch(request, callback);
         } else {
             window.alert('Directions request failed due to ' + status);
@@ -246,9 +284,7 @@ function callback(results, status, pagination) {
         //moreButton.disabled = true;
         pagination.nextPage();
       });
-/*      pagination.nextPage();*/
     }
-    // get details about place  
 
       for (var i = 0; i < results.length; i++) {
 	    	var place = results[i];
@@ -256,16 +292,8 @@ function callback(results, status, pagination) {
 	     }
 }
 
-function call() {
-	if (status == google.maps.places.PlacesServiceStatus.OK) {
-	    console.log("details");
-	  } else {
-	  	console.log("Error");
-	  }
-	}
 //called in callback()
 function createMarker(place) {
-	
 		//getting info about a place
 		//OPENING HOURS
 		try{
@@ -330,8 +358,8 @@ function createMarker(place) {
            iw_paraghraph.innerHTML += place.vicinity;
            iw_paraghraph.innerHTML += "<br>Types: " + place_types;
            iw_paraghraph.innerHTML += "<br> Rating " + place.rating;
-           iw_paraghraph.innerHTML += "<br>Price level " + place.price_level;
-           iw_paraghraph.innerHTML += "<br>Website " + place.website;
+/*           iw_paraghraph.innerHTML += "<br>Price level " + place.price_level;
+           iw_paraghraph.innerHTML += "<br>Website " + place.website;*/
            iw_image.innerHTML = '<img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100"> ';
            //adding to the route as a waypoint
             if (addToRouteBtn){

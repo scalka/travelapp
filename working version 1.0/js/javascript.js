@@ -214,8 +214,7 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
           //poliline from the JSON response array
           poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
           extendBounds(route.bounds);
-		  //radius - Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters
-		  var radius = document.getElementById('detour_range').value;
+
 		  var request = {
 		  	bounds: route.bounds,
 		  	types: ['natural_feature','art_gallery', 'museum', 'amusement_park', 'park', 'stadium']
@@ -235,10 +234,7 @@ function extendBounds(bounds){
 }
 
 function callback(results, status, pagination) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-  	placesResult = results;
-  
-/* TODO  */
+	placesResult = results;
   if (pagination.hasNextPage) {
    	//each nextPage is a new request 	
       var moreButton = document.getElementById('more');
@@ -254,16 +250,11 @@ function callback(results, status, pagination) {
 
       for (var i = 0; i < results.length; i++) {
 	    	var place = results[i];
-	        var detailsRequest = {
-	        	placeId: place.place_id
-	        }
-/*	        //does not give too much detail
-		    servicePlaces.getDetails(detailsRequest, call);*/
 	     	createMarker(results[i]);
-	     	}
-    	}
-
+	     }
 }
+
+
 
 
 function call() {
@@ -283,7 +274,6 @@ function createMarker(place) {
 			// Loop through opening hours weekday text
 	        for (var i = 0; i < place.opening_hours.weekday_text.length; i++) {
 	            // Create DIV element and append to opening_hours_div
-
 	            opening_hours += place.opening_hours.weekday_text[i];
 	           // opening_hours_div.appendChild(content);
 	        }
@@ -295,35 +285,34 @@ function createMarker(place) {
 	   if ( place.photos != null ) {
 			var photo_url = place.photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100});
 		} else  {
-			var photo_url = "http://placehold.it/350x150";
+			var photo_url = "http://placehold.it/150x150";
 		}
 		//TYPES
 		var place_types="";
 		for (var i=0; i < place.types.length; i++){
 			place_types += (" " + place.types[i]);
 		}
-
-		//console.log("createMarker");
-        var placeLoc = place.geometry.location;
+		//creating new marker
         var marker = new google.maps.Marker({
           map: map,
           position: place.geometry.location
         });
-
+        //adding marker to an array
         markersArray.push(marker);
-
+        //creating a list view
         var ul = document.getElementById("list");
     	var li = document.createElement("li");
     	li.setAttribute("id", markersArray.length-1);
-    	li.innerHTML = '<div class="card"> <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place.name + '</h4> <p class="place_description"> </p> <button id=addToRouteBtn">Add</button> </div> </div>';
+    	li.innerHTML = '<div class="card"> <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="300" height="150"> <p class="place_name">' + place.name + '</p> ';
         ul.appendChild(li);
-
+        //listener on li
         li.addEventListener('click', function(event){
         	var li_id = li.id;
         	console.log(li_id);
+        	//open info window according to the element clicked
         	openMarker(li_id);
         });
-
+        //creating new info window for each marker
         infowindow = new google.maps.InfoWindow();	
         google.maps.event.addListener(marker, 'click', function() {
           infowindow.setContent(infoWindowHtml);
@@ -335,18 +324,15 @@ function createMarker(place) {
 		            var iw_heading = document.getElementById('iw_heading');
 		            var iw_paraghraph = document.getElementById('iw_paraghraph');
 		            var iw_image = document.getElementById('iw_image');
-
+		    //setting content        
            iw_heading.innerHTML = place.name;
-           
            iw_paraghraph.innerHTML += place.vicinity;
-
            iw_paraghraph.innerHTML += "<br>Types: " + place_types;
            iw_paraghraph.innerHTML += "<br> Rating " + place.rating;
            iw_paraghraph.innerHTML += "<br>Price level " + place.price_level;
            iw_paraghraph.innerHTML += "<br>Website " + place.website;
- 
            iw_image.innerHTML = '<img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100"> ';
-
+           //adding to the route as a waypoint
             if (addToRouteBtn){
             	addToRouteBtn.addEventListener('click', function(){
             		addToRoute(place);
@@ -356,12 +342,12 @@ function createMarker(place) {
             }
         });
 }
-
+//opening marker from a listview
 function openMarker(id) {
 	console.log(id);
 	google.maps.event.trigger(markersArray[id], 'click');
 }
-
+//adding to the route as a waypoint
 function addToRoute(place) {
 	console.log(place);
 	var position = place.geometry.location; 
@@ -392,8 +378,3 @@ function addToRoute(place) {
               directionsService, directionsDisplay, waypoints );
         } // if exists end
 };  // if add to route end
-
-function addToRouteFromList(placeObject){
-	console.log(placeObject.position);
-	addToRoute();
-}

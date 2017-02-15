@@ -68,7 +68,7 @@ label, input {
   padding: 0;
   max-width: 350px; }
 
-li {
+.flex-li {
   min-height: 30px;
   border-bottom: 1px solid #c8c8c8;
   margin-top: -1px;
@@ -130,18 +130,26 @@ label, input {
   text-align: center;
   cursor: pointer; }
 
+#listview {
+  position: absolute;
+  bottom: 0px;
+  background-color: #f6f2f2;
+  max-width: 100%; }
+
 #list {
   display: flex;
-  flex-flow: row no-wrap;
+  flex-flow: row nowrap;
   list-style: none;
   align-items: stretch;
   justify-content: space-around;
   overflow-x: scroll; }
 
 #list > li {
-  margin: 10px;
-  flex: 0 1 auto;
-  min-width: 200px; }
+  margin: 10px; }
+
+#list > li > img {
+  height: 150px;
+  width: 150px; }
 
 input[type=radio]:checked + label {
   background-color: #43a047; }

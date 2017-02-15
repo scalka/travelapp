@@ -5,6 +5,7 @@ var destination_input; // destination
 var destination_autocomplete;
 var switch_view_control_list; // div for listview button
 var listview_btn;
+var listview_div;
 var switch_view_summary; // div for summary btn
 var route_summary_btn;
 var route_summary;
@@ -36,7 +37,6 @@ var total_distance = 0; // total distance in km
 var distance; // holds distance value 
 var total_duration = 0; // total duration in h
 var duration; // hold distance value
-var listview;
 
 var markersArray = [];
 
@@ -178,11 +178,19 @@ function initMap() {
 
     }); // end event listener
 
+
+	listview_div = document.getElementById("listview").style.display = "none";
+
+	//opening list view
     listview_btn = document.getElementById("listview_btn");
 	listview_btn.addEventListener('click', function(){
-		//displayList(placesResult);
-		$('#modal_list').modal();
+		document.getElementById("listview").style.display = "block";
 	});
+	//closing list view
+	map.addListener('click', function(){
+		document.getElementById("listview").style.display = "none";
+	});
+
 
 } // init() close
 
@@ -213,7 +221,7 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
           route = response.routes[0];
           //poliline from the JSON response array
           poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
-          extendBounds(route.bounds);
+          //extendBounds(route.bounds);
 
 		  var request = {
 		  	bounds: route.bounds,
@@ -226,12 +234,6 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
         
  		});
 } // end of route()
-
-function extendBounds(bounds){
-	/*console.log(bounds);
-	console.log(bounds.getNorthEast());
-	console.log(bounds.getSouthWest());*/
-}
 
 function callback(results, status, pagination) {
 	placesResult = results;
@@ -254,9 +256,6 @@ function callback(results, status, pagination) {
 	     }
 }
 
-
-
-
 function call() {
 	if (status == google.maps.places.PlacesServiceStatus.OK) {
 	    console.log("details");
@@ -266,6 +265,7 @@ function call() {
 	}
 //called in callback()
 function createMarker(place) {
+	
 		//getting info about a place
 		//OPENING HOURS
 		try{
@@ -283,7 +283,7 @@ function createMarker(place) {
 		}
 		//PHOTO
 	   if ( place.photos != null ) {
-			var photo_url = place.photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100});
+			var photo_url = place.photos[0].getUrl({'maxWidth': 150, 'maxHeight': 150});
 		} else  {
 			var photo_url = "http://placehold.it/150x150";
 		}
@@ -303,7 +303,7 @@ function createMarker(place) {
         var ul = document.getElementById("list");
     	var li = document.createElement("li");
     	li.setAttribute("id", markersArray.length-1);
-    	li.innerHTML = '<div class="card"> <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="300" height="150"> <p class="place_name">' + place.name + '</p> ';
+    	li.innerHTML = '<img src="'+photo_url+'"  alt="image" width="150" height="150"> <p class="place_name">' + place.name + '</p> ';
         ul.appendChild(li);
         //listener on li
         li.addEventListener('click', function(event){
@@ -325,6 +325,7 @@ function createMarker(place) {
 		            var iw_paraghraph = document.getElementById('iw_paraghraph');
 		            var iw_image = document.getElementById('iw_image');
 		    //setting content        
+		    console.log(place);
            iw_heading.innerHTML = place.name;
            iw_paraghraph.innerHTML += place.vicinity;
            iw_paraghraph.innerHTML += "<br>Types: " + place_types;

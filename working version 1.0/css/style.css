@@ -283,3 +283,8 @@ input[type=range]:focus::-ms-fill-upper {
     font-size: 18px; } }
 
 /*# sourceMappingURL=style.css.map */
+
+
+.checked {
+  background-color: red;
+}

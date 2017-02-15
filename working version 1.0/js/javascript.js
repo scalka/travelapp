@@ -303,22 +303,26 @@ function createMarker(place) {
 			place_types += (" " + place.types[i]);
 		}
 
-	   //listview
-		listview = document.getElementById('listview');
-	   listview.innerHTML += '<div class="card"> <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place.name + '</h4> <p class="place_description"> </p> <button id=addToRouteBtn">Add</button> </div> </div>';
-	   /*var btn = document.getElementById("addToRouteBtn");
-	   	btn.addEventListener('click', function(){
-	   		console.log("click");
-	   	});
-*/
-
 		//console.log("createMarker");
         var placeLoc = place.geometry.location;
         var marker = new google.maps.Marker({
           map: map,
           position: place.geometry.location
         });
+
         markersArray.push(marker);
+
+        var ul = document.getElementById("list");
+    	var li = document.createElement("li");
+    	li.setAttribute("id", markersArray.length-1);
+    	li.innerHTML = '<div class="card"> <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place.name + '</h4> <p class="place_description"> </p> <button id=addToRouteBtn">Add</button> </div> </div>';
+        ul.appendChild(li);
+
+        li.addEventListener('click', function(event){
+        	var li_id = li.id;
+        	console.log(li_id);
+        	openMarker(li_id);
+        });
 
         infowindow = new google.maps.InfoWindow();	
         google.maps.event.addListener(marker, 'click', function() {
@@ -351,6 +355,11 @@ function createMarker(place) {
                console.log("btn null");
             }
         });
+}
+
+function openMarker(id) {
+	console.log(id);
+	google.maps.event.trigger(markersArray[id], 'click');
 }
 
 function addToRoute(place) {

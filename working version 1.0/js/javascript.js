@@ -24,7 +24,10 @@ var directionsService; // google directions service
 var directionsDisplay; // google directions service
 var poliline; //bounds
 var infowindow;
-var infoWindowHtml = '<div id="iw">  <div id="iw_header">header</div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
+var infoWindowHtml = '<div id="iw"> <div id="iw_content">  <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph"></p>    </div>    <div id="iw_image"> </div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
+//second version
+/*var infoWindowHtml = '<div id="iw">  <div id="iw_header"></div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
+*/
 var listObject = '<button id"addBtn">';
 
 var navopen = false; 
@@ -35,6 +38,7 @@ var total_duration = 0; // total duration in h
 var duration; // hold distance value
 var listview;
 
+var markersArray = [];
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -256,33 +260,11 @@ function callback(results, status, pagination) {
 /*	        //does not give too much detail
 		    servicePlaces.getDetails(detailsRequest, call);*/
 	     	createMarker(results[i]);
-	     	displayList(results[i]);
 	     	}
     	}
 
 }
 
-function displayList(place){
-
-	 listview = document.getElementById('listview');
-	var place_name = place.name;
-	/*var place_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum";
-*/	
-
-	/*var position = place.geometry.location; 
-    var placeLat = place.geometry.location.lat();
-    var placeLng = place.geometry.location.lng();
-	var placeArray = [position, placeLat, placeLng];*/
-	if ( place.photos != null ) {
-		var photo_url = place.photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100});
-	} else  {
-		var photo_url = "ssdds";
-	}
-
-	listview.innerHTML += '<div class="card"> <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place_name + '</h4> <p class="place_description">' +  ' </div> </div>';
-
-
-}	
 
 function call() {
 	if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -293,12 +275,51 @@ function call() {
 	}
 //called in callback()
 function createMarker(place) {
-		console.log("createMarker");
+		//getting info about a place
+		//OPENING HOURS
+		try{
+			var opening_hours = "";
+		  	var opening_hours = place.opening_hours.periods[1].open.time;
+			// Loop through opening hours weekday text
+	        for (var i = 0; i < place.opening_hours.weekday_text.length; i++) {
+	            // Create DIV element and append to opening_hours_div
+
+	            opening_hours += place.opening_hours.weekday_text[i];
+	           // opening_hours_div.appendChild(content);
+	        }
+		}
+		catch(e){
+		  var opening_hours ='No work time';
+		}
+		//PHOTO
+	   if ( place.photos != null ) {
+			var photo_url = place.photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100});
+		} else  {
+			var photo_url = "http://placehold.it/350x150";
+		}
+		//TYPES
+		var place_types="";
+		for (var i=0; i < place.types.length; i++){
+			place_types += (" " + place.types[i]);
+		}
+
+	   //listview
+		listview = document.getElementById('listview');
+	   listview.innerHTML += '<div class="card"> <img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100">  <div class="card-block"> <h4 class="place_name">' + place.name + '</h4> <p class="place_description"> </p> <button id=addToRouteBtn">Add</button> </div> </div>';
+	   /*var btn = document.getElementById("addToRouteBtn");
+	   	btn.addEventListener('click', function(){
+	   		console.log("click");
+	   	});
+*/
+
+		//console.log("createMarker");
         var placeLoc = place.geometry.location;
         var marker = new google.maps.Marker({
           map: map,
-          position: place.geometry.location,
+          position: place.geometry.location
         });
+        markersArray.push(marker);
+
         infowindow = new google.maps.InfoWindow();	
         google.maps.event.addListener(marker, 'click', function() {
           infowindow.setContent(infoWindowHtml);
@@ -310,10 +331,17 @@ function createMarker(place) {
 		            var iw_heading = document.getElementById('iw_heading');
 		            var iw_paraghraph = document.getElementById('iw_paraghraph');
 		            var iw_image = document.getElementById('iw_image');
-           iw_header.innerHTML = place.name;
-           iw_text.innerHTML = "Types: " + place.types;
-           iw_content.innerHTML = "Opening hours: " + place.opening_hours;
-           iw_paraghraph.innerHTML = place.vicinity;
+
+           iw_heading.innerHTML = place.name;
+           
+           iw_paraghraph.innerHTML += place.vicinity;
+
+           iw_paraghraph.innerHTML += "<br>Types: " + place_types;
+           iw_paraghraph.innerHTML += "<br> Rating " + place.rating;
+           iw_paraghraph.innerHTML += "<br>Price level " + place.price_level;
+           iw_paraghraph.innerHTML += "<br>Website " + place.website;
+ 
+           iw_image.innerHTML = '<img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100"> ';
 
             if (addToRouteBtn){
             	addToRouteBtn.addEventListener('click', function(){
@@ -326,6 +354,7 @@ function createMarker(place) {
 }
 
 function addToRoute(place) {
+	console.log(place);
 	var position = place.geometry.location; 
    var placeLat = place.geometry.location.lat();
    var placeLng = place.geometry.location.lng();

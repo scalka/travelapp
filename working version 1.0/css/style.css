@@ -107,6 +107,9 @@ input:focus {
 label, input {
   transition: color 0.4s ease, background-color 0.1s ease-in-out; }
 
+.checkbox_ul {
+  list-style-type: none; }
+
 .segmented_control_ul {
   display: flex;
   justify-content: space-between;

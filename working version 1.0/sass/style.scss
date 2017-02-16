@@ -85,6 +85,7 @@ html, body {
 label, input {
   display: block
 }
+
 .flex-ul {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   background-color: $bgColor;
@@ -127,6 +128,7 @@ input, input:focus {
   outline: none;
   width: 100%;
 }
+
 input:focus {
   color: #000;
     background-color: lighten($color, 40);
@@ -190,6 +192,10 @@ input[type=radio]:checked + label {
   background-color: $secondaryColor;
 } 
 
+input[type="checkbox"]
+{
+    vertical-align:middle;
+}
 
 
 
@@ -205,14 +211,6 @@ input[type=radio]:checked + label {
 
 .modal-content {
   border-radius: 0;
-}
-
-
-#modal_list {
-
-}
-.modal_body{
-
 }
 
 

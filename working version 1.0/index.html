@@ -54,14 +54,39 @@
                 <ul class="segmented_control_ul">
            
                   <li class="segmented_control_li">
-                  <input class="segmented_control_input" type="radio" name="type" value="1" id="changemode-walking" checked="checked">
-                  <label class="segment_control_label" for="changemode-walking">Walking</label>
-                </li>
-                <li class="segmented_control_li">
-                  <input class="segmented_control_input" type="radio" value="2" name="type" id="changemode-driving">
-                  <label class="segment_control_label" for="changemode-driving">Driving</label>
+                    <input class="segmented_control_input" type="radio" value="2" name="type" id="changemode-driving" checked="checked">
+                    <label class="segment_control_label" for="changemode-driving">Driving</label>
                   </li>
-                </ul>  
+                  <li class="segmented_control_li">
+                    <input class="segmented_control_input" type="radio" name="type" value="1" id="changemode-walking" >
+                    <label class="segment_control_label" for="changemode-walking">Walking</label>
+                  </li>
+                </ul> 
+
+                <ul class="checkbox_ul">
+                  <li class="checkbox_li">
+                    <input class="cat_checkbox" type="checkbox" name="checkbox" id="cat_history" value="museum"/>
+                    <label for="cat_history">Hisory</label>
+                  </li>  
+                  <li class="checkbox_li">
+                    <input class="cat_checkbox" type="checkbox" name="checkbox" id="cat_outdoors" value="value"/>
+                    <label for="cat_outdoors">Outdoors</label>
+                  </li> 
+                  <li class="checkbox_li">
+                    <input class="cat_checkbox" type="checkbox" name="checkbox" id="cat_sport" value="value"/>
+                    <label for="cat_sport">Sport</label>
+                  </li> 
+                  <li class="checkbox_li">
+                    <input class="cat_checkbox" type="checkbox" name="checkbox" id="cat_food" value="value"/>
+                    <label for="cat_food">Food</label>
+                  </li> 
+                  <li class="checkbox_li">
+                    <input class="cat_checkbox" type="checkbox" name="checkbox" id="cat_entertainment" value="value"/>
+                    <label for="cat_entertainment">Entertainment</label>
+                  </li> 
+                </ul>
+
+
                 <li>
                   <button type="button" onclick="plan()">PLAN</button>
                 </li>

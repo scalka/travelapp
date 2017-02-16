@@ -154,6 +154,9 @@ label, input {
 input[type=radio]:checked + label {
   background-color: #43a047; }
 
+input[type="checkbox"] {
+  vertical-align: middle; }
+
 #map {
   height: calc(100% - 50px);
   width: 100%;

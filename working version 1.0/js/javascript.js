@@ -10,7 +10,7 @@ var switch_view_summary; // div for summary btn
 var route_summary_btn;
 var route_summary;
 var addToRoute_listview;
-
+var typeId = 0; 
 var route; // hold the route
 var radioButton; // checked radioButton
 var top_header; // heading on top of page
@@ -224,36 +224,23 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
           route = response.routes[0];
           //poliline from the JSON response array
           poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
-          //extendBounds(route.bounds);
+          //extendBounds(route.bounds)
 
-		var ne = route.bounds.getNorthEast();
-		var sw = route.bounds.getSouthWest();
+			var checkboxes = document.getElementsByClassName('cat_checkbox');
 
-		var triangleCoords = [
-		    {lat: ne.lat(), lng: ne.lng()},
-		    {lat: ne.lat(), lng: sw.lng()},
+			var typeArray= ['museum','natural_feature', 'stadium','restaurant','bar'];
 
-		    {lat: sw.lat(), lng: sw.lng()},
-		    {lat: sw.lat(), lng: ne.lng()}
-		  ];
-
-		// Construct the polygon.
-		  var bermudaTriangle = new google.maps.Polygon({
-		    paths: triangleCoords,
-		    strokeColor: '#FF0000',
-		    strokeOpacity: 0.8,
-		    strokeWeight: 2,
-		    fillColor: '#FF0000',
-		    fillOpacity: 0.35
-		  });
-		  bermudaTriangle.setMap(map);
-
-		  var request = {
-		  	bounds: route.bounds,
-		  	types: ['natural_feature','art_gallery', 'museum', 'amusement_park', 'park', 'stadium']
-		  };
-		  console.log(request);
-		  servicePlaces.nearbySearch(request, callback);
+			for(var i=0; i < checkboxes.length; i++){
+				if(checkboxes[i].checked === true){
+					var request = {
+						bounds: route.bounds,
+						type: typeArray[i]
+					};
+					console.log("i: " + i);
+					servicePlaces.nearbySearch(request, callback);
+					console.log(typeId + "id");
+				} // if checkboxes end
+			}  // for loop end
         } else {
             window.alert('Directions request failed due to ' + status);
         }
@@ -262,28 +249,21 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
 } // end of route()
 
 function callback(results, status, pagination) {
-	console.log(results);
+	console.log(typeId);
 	placesResult = results;
 	  if (pagination.hasNextPage) {
 	  	console.log("nextPage pagination");
 	  	pagination.nextPage();
-	   	//each nextPage is a new request 	
-/*      	var moreButton = document.getElementById('more');
-      	moreButton.disabled = false;
-	    moreButton.addEventListener('click', function() {
-        //moreButton.disabled = true;
-        pagination.nextPage();
-	    });*/
 	   }
-
       for (var i = 0; i < results.length; i++) {
-	    	var place = results[i];
-	     	createMarker(results[i]);
-	     }
+	     createMarker(results[i], typeId);
+	   }
+	   typeId++;
 }
 
+
 //called in callback()
-function createMarker(place) {
+function createMarker(place, iconId) {
 		//getting info about a place
 		//OPENING HOURS
 		try{
@@ -310,10 +290,23 @@ function createMarker(place) {
 		for (var i=0; i < place.types.length; i++){
 			place_types += (" " + place.types[i]);
 		}
+
+
+		//icons for markers
+		var icons = {
+			0:  'markers/museum.png',
+			1:  'markers/outdoors.png',
+			2:  'markers/sport.png',
+			3:  'markers/food.png',
+			4:  'markers/entert.png',
+			5:  'markers/museum.png'
+        }
+        
 		//creating new marker
         var marker = new google.maps.Marker({
           map: map,
-          position: place.geometry.location
+          position: place.geometry.location,
+          icon: icons[iconId]
         });
         //adding marker to an array
         markersArray.push(marker);
@@ -330,6 +323,7 @@ function createMarker(place) {
         	//open info window according to the element clicked
         	openMarker(li_id);
         });
+
         //creating new info window for each marker
         infowindow = new google.maps.InfoWindow();	
         google.maps.event.addListener(marker, 'click', function() {

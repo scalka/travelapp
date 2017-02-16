@@ -101,10 +101,10 @@ function initMap() {
     //hiding divs on init when form is displayed
     switch_view_control_list = document.getElementById('switch_view_control_list');
     switch_view_summary = document.getElementById('switch_view_summary');
-
-    form = document.getElementById('plan_form');
+    loader = document.getElementById('loader');
 
 	// placing controls on the map
+
     map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(switch_view_summary);
    	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(switch_view_control_list);
 
@@ -242,14 +242,23 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
 } // end of routeFunction()
 
 function callback(results, status, pagination) {
-	placesResult = results;
+		var loader = document.getElementById("loader");
+		placesResult = results;
 	  if (pagination.hasNextPage) {
 	  	console.log("nextPage pagination");
 	  	pagination.nextPage();
+	    loader.style.display = "block";
+	   } else {
+	   	loader.style.display = "none";
 	   }
+
+
       for (var i = 0; i < results.length; i++) {
-	     createMarker(results[i]);
+	    createMarker(results[i]);
 	   }
+
+	 //  loader.style.display = "none";
+
 }
 
 //called in callback()
@@ -320,6 +329,7 @@ function createMarker(place) {
 	li.setAttribute("id", markersArray.length-1);
 	li.innerHTML = '<img src="'+photo_url+'"  alt="image" width="150" height="150"> <p class="place_name">' + place.name + '</p> ';
     ul.appendChild(li);
+    
     //listener on li
     li.addEventListener('click', function(event){
     	//open info window according to the element clicked

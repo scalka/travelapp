@@ -188,7 +188,10 @@ function initMap() {
 	});
 	//closing list view
 	map.addListener('click', function(){
+		//close list view
 		document.getElementById("listview").style.display = "none";
+		//close open info window
+		infowindow.close();
 	});
 
 
@@ -223,45 +226,30 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
           poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
           //extendBounds(route.bounds);
 
-var ne = route.bounds.getNorthEast();
-var sw = route.bounds.getSouthWest();
+		var ne = route.bounds.getNorthEast();
+		var sw = route.bounds.getSouthWest();
 
+		var triangleCoords = [
+		    {lat: ne.lat(), lng: ne.lng()},
+		    {lat: ne.lat(), lng: sw.lng()},
 
+		    {lat: sw.lat(), lng: sw.lng()},
+		    {lat: sw.lat(), lng: ne.lng()}
+		  ];
 
-
-var triangleCoords = [
-    {lat: ne.lat(), lng: ne.lng()},
-    {lat: ne.lat(), lng: sw.lng()},
-
-    {lat: sw.lat(), lng: sw.lng()},
-    {lat: sw.lat(), lng: ne.lng()}
-  ];
-
-// Construct the polygon.
-  var bermudaTriangle = new google.maps.Polygon({
-    paths: triangleCoords,
-    strokeColor: '#FF0000',
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: '#FF0000',
-    fillOpacity: 0.35
-  });
-  bermudaTriangle.setMap(map);
-
-
-
-
-
-
-
-var loclat = route.bounds.getCenter().lat();
-var loclng = route.bounds.getCenter().lng()
-
+		// Construct the polygon.
+		  var bermudaTriangle = new google.maps.Polygon({
+		    paths: triangleCoords,
+		    strokeColor: '#FF0000',
+		    strokeOpacity: 0.8,
+		    strokeWeight: 2,
+		    fillColor: '#FF0000',
+		    fillOpacity: 0.35
+		  });
+		  bermudaTriangle.setMap(map);
 
 		  var request = {
-		  	//bounds: route.bounds,
-		  	location: {lat: loclat, lng: loclng},
-		  	radius: '10000',
+		  	bounds: route.bounds,
 		  	types: ['natural_feature','art_gallery', 'museum', 'amusement_park', 'park', 'stadium']
 		  };
 		  console.log(request);
@@ -274,17 +262,19 @@ var loclng = route.bounds.getCenter().lng()
 } // end of route()
 
 function callback(results, status, pagination) {
+	console.log(results);
 	placesResult = results;
-  if (pagination.hasNextPage) {
-   	//each nextPage is a new request 	
-      var moreButton = document.getElementById('more');
-      moreButton.disabled = false;
-
-      moreButton.addEventListener('click', function() {
+	  if (pagination.hasNextPage) {
+	  	console.log("nextPage pagination");
+	  	pagination.nextPage();
+	   	//each nextPage is a new request 	
+/*      	var moreButton = document.getElementById('more');
+      	moreButton.disabled = false;
+	    moreButton.addEventListener('click', function() {
         //moreButton.disabled = true;
         pagination.nextPage();
-      });
-    }
+	    });*/
+	   }
 
       for (var i = 0; i < results.length; i++) {
 	    	var place = results[i];

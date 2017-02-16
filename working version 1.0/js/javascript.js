@@ -402,3 +402,9 @@ function addToRoute(place) {
               directionsService, directionsDisplay, waypoints );
         } // if exists end
 };  // if add to route end
+
+
+
+function print() {
+	window.print();
+}

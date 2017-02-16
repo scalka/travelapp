@@ -1,7 +1,12 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro");
 html, body {
   height: 100%;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  font-family: "Open Sans", sans-serif; }
+
+p {
+  font-family: "Source Sans Pro", sans-serif; }
 
 .navbar {
   margin-bottom: 0; }
@@ -75,7 +80,7 @@ label, input {
   position: relative; }
 
 .form_label {
-  font-family: "Lucida Grande", "Trebuchet MS", sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 70%;
   color: #aeaeae;
   letter-spacing: 0.03em;
@@ -144,7 +149,7 @@ label, input {
   flex-flow: row nowrap;
   list-style: none;
   align-items: stretch;
-  justify-content: space-around;
+  justify-content: space-between;
   overflow-x: scroll; }
 
 #list > li {
@@ -175,7 +180,7 @@ input[type="checkbox"] {
 
 /* info window */
 #iw #iw_header {
-  font-family: 'Open Sans Condensed', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 22px;
   font-weight: 400;
   padding: 10px;
@@ -225,6 +230,9 @@ input[type="checkbox"] {
     transform: rotate(0deg); }
   100% {
     transform: rotate(360deg); } }
+.modal-body {
+  media: print; }
+
 @media all and (min-width: 600px) {
   .aside {
     flex: 1 auto; } }

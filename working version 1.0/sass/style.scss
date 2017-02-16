@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro');
+
 $primaryColor: #757575;
 $secondaryColor: #43a047;
 $accentColor: #f4511e;
@@ -8,15 +10,23 @@ $transparentColor: rgba(117, 117, 117, 0.59);
 $color  : #888888;
 $bgColor: #fffdfa;
 $lucida: "Lucida Grande", "Trebuchet MS", sans-serif;
+$font: "Source Sans", sans-serif;
 
 
+$source_sans: 'Source Sans Pro', sans-serif;
+$open_sans: 'Open Sans', sans-serif;
 
 
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: $open_sans;
 } 
+
+p {
+  font-family: $source_sans;
+}
 
 .navbar {
   margin-bottom: 0;
@@ -103,7 +113,7 @@ label, input {
 }
 
 .form_label {
-  font-family: $lucida;
+  font-family: $open_sans;
   font-size: 70%;
   color: lighten($color, 15);
   letter-spacing: 0.03em;
@@ -179,7 +189,7 @@ label, input {
   flex-flow:row nowrap;
   list-style: none;
   align-items: stretch;
-  justify-content: space-around;
+  justify-content: space-between;
   overflow-x: scroll;
 }
 
@@ -224,7 +234,7 @@ input[type="checkbox"]
 
 /* info window */      
 #iw #iw_header {
-  font-family: 'Open Sans Condensed', sans-serif;
+  font-family: $open_sans;
    font-size: 22px;
    font-weight: 400;
    padding: 10px;
@@ -269,7 +279,6 @@ input[type="checkbox"]
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
 }
-
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }
   100% { -webkit-transform: rotate(360deg); }
@@ -282,7 +291,9 @@ input[type="checkbox"]
 
 
 
-
+.modal-body{
+  media: print;
+}
 
 
 

@@ -183,6 +183,10 @@ label, input {
   margin: 10px;
  // flex: 0 1 auto;
 }
+#list > li.active {
+  border-top: 3px solid red; 
+}
+
 #list > li > img {
   height: 150px;
   width: 150px;

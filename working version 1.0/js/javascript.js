@@ -249,21 +249,19 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
 } // end of route()
 
 function callback(results, status, pagination) {
-	console.log(typeId);
 	placesResult = results;
 	  if (pagination.hasNextPage) {
 	  	console.log("nextPage pagination");
 	  	pagination.nextPage();
 	   }
       for (var i = 0; i < results.length; i++) {
-	     createMarker(results[i], typeId);
+	     createMarker(results[i]);
 	   }
-	   typeId++;
 }
 
 
 //called in callback()
-function createMarker(place, iconId) {
+function createMarker(place) {
 		//getting info about a place
 		//OPENING HOURS
 		try{
@@ -290,6 +288,24 @@ function createMarker(place, iconId) {
 		for (var i=0; i < place.types.length; i++){
 			place_types += (" " + place.types[i]);
 		}
+var typeArray= ['museum','natural_feature', 'stadium','restaurant','bar'];
+		var iconId = "";
+
+		if (place_types.includes('museum')){
+			iconId = 0;
+		} else if (place_types.includes('natural_feature')){
+			iconId = 1;
+		} else if (place_types.includes('stadium')){
+			iconId = 2;	
+		} else if (place_types.includes('restaurant')){
+			iconId = 3;
+		} else if (place_types.includes('bar')){
+			iconId = 4; 
+		} else {
+			iconId = 5;
+		}
+
+
 
 
 		//icons for markers
@@ -301,7 +317,7 @@ function createMarker(place, iconId) {
 			4:  'markers/entert.png',
 			5:  'markers/museum.png'
         }
-        
+
 		//creating new marker
         var marker = new google.maps.Marker({
           map: map,
@@ -318,10 +334,8 @@ function createMarker(place, iconId) {
         ul.appendChild(li);
         //listener on li
         li.addEventListener('click', function(event){
-        	var li_id = li.id;
-        	console.log(li_id);
         	//open info window according to the element clicked
-        	openMarker(li_id);
+        	openMarker(li.id);
         });
 
         //creating new info window for each marker

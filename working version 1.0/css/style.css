@@ -147,6 +147,9 @@ label, input {
 #list > li {
   margin: 10px; }
 
+#list > li.active {
+  border-top: 3px solid red; }
+
 #list > li > img {
   height: 150px;
   width: 150px; }

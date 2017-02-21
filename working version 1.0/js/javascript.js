@@ -169,6 +169,8 @@ function initMap() {
 
 	route_summary_btn.addEventListener('click', function(){     
 	    route_summary.innerHTML = '';
+      total_duration = 0;
+      total_distance = 0;
 			for (var i = 0; i < route.legs.length; i++) {
 	          var routeSegment = i + 1;
 	          route_summary .innerHTML += '<b>Route Segment: ' + routeSegment +
@@ -180,7 +182,9 @@ function initMap() {
 	          total_duration = total_duration + route.legs[i].duration.value ; // indicates the duration in seconds.
 	        }
 	        var  total_distance_km = (total_distance/1000).toFixed(1) ;
-	        var total_duration_h = (total_duration/3600).toFixed(2);
+
+	        var total_duration_h = secondsToHms(total_duration);
+
 	        h3_travel_mode.innerHTML = travel_mode;
 	        distance.innerHTML = total_distance_km + " km";
 	        duration.innerHTML = total_duration_h + " h";
@@ -218,22 +222,22 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
         optimizeWaypoints: true
       }, function(response, status) {
       	//db with locasions
-      	if (status === 'OK') {
-			directionsDisplay.setDirections(response);
-			route = response.routes[0];
-			//poliline from the JSON response array
-			poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
-			var checkboxes = document.getElementsByClassName('cat_checkbox');
-			var typeArray= ['museum','natural_feature', 'stadium','restaurant','bar'];
-			for(var i=0; i < checkboxes.length; i++){
-				if(checkboxes[i].checked === true){
-					var request = {
-						bounds: route.bounds,
-						type: typeArray[i]
-					};
-					servicePlaces.nearbySearch(request, callback);
-				} // if checkboxes end
-			}  // for loop end
+        if (status === 'OK') {
+    			directionsDisplay.setDirections(response);
+    			route = response.routes[0];
+    			//poliline from the JSON response array
+    			poliline = response.routes[0].overview_polyline; // gets the poliline from directions api 
+    			var checkboxes = document.getElementsByClassName('cat_checkbox');
+    			var typeArray= ['museum','natural_feature', 'stadium','restaurant','bar'];
+    			for(var i=0; i < checkboxes.length; i++){
+    				if(checkboxes[i].checked === true){
+    					var request = {
+    						bounds: route.bounds,
+    						type: typeArray[i]
+    					};
+    					servicePlaces.nearbySearch(request, callback);
+    				} // if checkboxes end
+    			}  // for loop end
         } else {
             window.alert('Directions request failed due to ' + status);
         }
@@ -243,19 +247,31 @@ function routeFunction(origin_place_id, destination_place_id, travel_mode,
 
 function callback(results, status, pagination) {
 		var loader = document.getElementById("loader");
-		placesResult = results;
-	  if (pagination.hasNextPage) {
-	  	console.log("nextPage pagination");
-	  	pagination.nextPage();
-	    loader.style.display = "block";
-	   } else {
-	   	loader.style.display = "none";
-	   }
+		
+    if (status === google.maps.places.PlacesServiceStatus.OK ){
+        placesResult = results;
+        if (pagination.hasNextPage) {
+          console.log("nextPage pagination");
+          pagination.nextPage();
+          loader.style.display = "block";
+         } else {
+          loader.style.display = "none";
+         }
+
+         for (var i = 0; i < results.length; i++) {
+          createMarker(results[i]);
+         }
+
+     } else if ( status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS ) {
+        //TODO DISPLAY msg
+        console.log("zero results");
+        window.alert("Zero results - try again");
+     }  
 
 
-      for (var i = 0; i < results.length; i++) {
-	    createMarker(results[i]);
-	   }
+      
+
+
 
 	 //  loader.style.display = "none";
 
@@ -403,8 +419,10 @@ function addToRoute(place) {
         } // if exists end
 };  // if add to route end
 
-
-
-function print() {
-	window.print();
+function secondsToHms(d) {
+  d = Number(d);
+  var h = Math.floor(d / 3600);
+  var m = Math.floor(d % 3600 / 60);
+ // var s = Math.floor(d % 3600 % 60);
+  return ((h > 0 ? h + ":" + (m < 10 ? "0" : "") : "") + m  ); 
 }

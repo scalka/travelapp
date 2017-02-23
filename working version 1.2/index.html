@@ -5,6 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
 
+    <script src="https://use.fontawesome.com/2a6d30d89c.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -16,6 +17,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+
+
 
     <!--     <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script> -->
     <script type="text/javascript" src="js/javascript.js"></script>
@@ -30,7 +33,10 @@
         <a href="addnewstops.html">Add new stop</a>
       </div>
       <div class="top_nav">
-        <span style="font-size:30px;cursor:pointer" onclick="openNav(mySidenav, 250)">&#9776; </span>
+        <span class="nav_icon" onclick="openNav(mySidenav, 250)"><i class="fa fa-bars fa-1x" aria-hidden="true"></i></span>
+
+        <span class="nav_icon" onclick="openForm()"><i class="fa fa-map-signs fa-1x" aria-hidden="true"></i></span>
+
 
         <h2 id="top_header" class="text-center">Plan your route</h2>
       </div>
@@ -41,16 +47,17 @@
 
               <ul class="flex-ul">             
                 <li class="flex-li">
-                  <input id="origin-input"  type="text"
-                  placeholder="Enter an origin location">
+                  <input id="origin-input" class="dest_input" type="text"
+                  placeholder="Enter the start location">
                   <label class="form_label" for="origin-input">Start</label>
                 </li>
                 <li class="flex-li">
-                  <input id="destination-input"  type="text"
-                    placeholder="Enter a destination location">
+                  <input id="destination-input" class="dest_input" type="text"
+                    placeholder="Enter the destination location">
                   <label class="form_label" for="destination-input">Destination</label>
                 </li>  
                 
+                <label for="segmented_control_ul" class="ul_label">Mode of transport</label>
                 <ul class="segmented_control_ul">
            
                   <li class="segmented_control_li">
@@ -63,33 +70,50 @@
                   </li>
                 </ul> 
 
-                <ul class="checkbox_ul">
+                <label for="checkbox_ul" class="ul_label">Categories</label>
+                <ul class="checkbox_ul" id="checkbox_ul">
                   <li class="checkbox_li">
                     <input class="cat_checkbox" type="checkbox" name="checkbox" id="cat_history" value="museum"/>
-                    <label for="cat_history">History</label>
+                    <label for="cat_history">
+                    <img src="markers/museum.png" alt="marker museums">
+                    History
+                    </label>
                   </li>  
                   <li class="checkbox_li">
                     <input class="cat_checkbox" type="checkbox" name="checkbox" id="cat_outdoors" value="value"/>
-                    <label for="cat_outdoors">Outdoors</label>
+                    <label for="cat_outdoors">
+                    <img src="markers/outdoors.png" alt="marker outdoors">
+                    Outdoors
+                    </label>
                   </li> 
                   <li class="checkbox_li">
                     <input class="cat_checkbox" type="checkbox" name="checkbox" id="cat_sport" value="value"/>
-                    <label for="cat_sport">Sport</label>
+                    <label for="cat_sport">
+                    <img src="markers/sport.png" alt="marker sport">
+                    Sport
+                    </label>
                   </li> 
                   <li class="checkbox_li">
                     <input class="cat_checkbox" type="checkbox" name="checkbox" id="cat_food" value="value"/>
-                    <label for="cat_food">Food</label>
+                    <label for="cat_food">
+                    <img src="markers/food.png" alt="marker food">
+                    Food
+                    </label>
                   </li> 
                   <li class="checkbox_li">
                     <input class="cat_checkbox" type="checkbox" name="checkbox" id="cat_entertainment" value="value"/>
-                    <label for="cat_entertainment">Entertainment</label>
+                    <label for="cat_entertainment">
+                    <img src="markers/entert.png" alt="marker entert">
+                    Entertainment
+                    </label>
                   </li> 
                 </ul>
 
 
-                <li>
-                  <button type="button" onclick="plan()">PLAN</button>
+                <li class="li_button">
+                  <button type="button" class="button" onclick="plan()">PLAN</button>
                 </li>
+
               </ul>
 
         </form>
@@ -98,8 +122,7 @@
      <div id="loader" class="loader" style="display: none"></div>
 
     <div id="switch_view_control_list">
-      <button class="control" id="listview_btn">ListView</button> 
-
+      <button class="control" id="listview_btn"><i class="fa fa-4x fa-list-ul icon-white" aria-hidden="true" ></i></button> 
     </div>
 
     <div id="map" onclick="closeNav()"></div>
@@ -120,6 +143,7 @@
             </button>
           </div>
           <div class="modal-body">
+
  <!--            
             <div id="listview">
               <ul id="list">
@@ -149,7 +173,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="ModalLabel">Route summary</h5>
+            <h2 class="modal-title" id="ModalLabel">Route summary</h2>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -161,6 +185,16 @@
             <div class="control" id="route_summary"></div>
           </div>
           <div class="modal-footer">
+              <img src="markers/museum.png" alt="marker museums">
+              History
+              <img src="markers/outdoors.png" alt="marker outdoors">
+              Outdoors
+              <img src="markers/sport.png" alt="marker sport">
+              Sport
+              <img src="markers/food.png" alt="marker food">
+              Food
+               <img src="markers/entert.png" alt="marker entert">
+              Entertainment
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>

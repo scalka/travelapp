@@ -1,3 +1,5 @@
+// Pagination is turned off, if you want to see more stops on the route, uncomment line 262 to 268
+
 var map; 
 var origin_input; // start
 var origin_autocomplete;
@@ -25,7 +27,7 @@ var directionsService; // google directions service
 var directionsDisplay; // google directions service
 var poliline; //bounds
 var infowindow;
-var infoWindowHtml = '<div id="iw"> <div id="iw_content">  <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph"></p>    </div>    <div id="iw_image"> </div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div> <button type="button" id="removeFromRouteBtn">Remove</button></div>';
+var infoWindowHtml = '<div id="iw"> <div id="iw_content">  <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph"></p>    </div>    <div id="iw_image"> </div>  </div>  <button type="button" class="buttonAddToRoute" id="addToRouteBtn">Add to route</button></div></div>';
 //second version
 /*var infoWindowHtml = '<div id="iw">  <div id="iw_header"></div>  <div id="iw_content">    <div id="iw_text">      <h2 id="iw_heading">heading</h2>      <p id="iw_paraghraph">iw_paraghraph</p>    </div>    <div id="iw_image"></div>  </div>  <button type="button" id="addToRouteBtn">Add</button></div>';
 */
@@ -55,17 +57,19 @@ function changeHeader(header){
 	top_header.innerHTML = header;
 }
 
-/*function openForm(){
-	document.getElementById("form_div").classList.add("form_opened");
-	document.getElementById("form_div").classList.remove("form_closed");
-}*/
 function closeForm(){
-	document.getElementById("form_div").classList.add("form_closed");
-/*	document.getElementById("form_div").classList.remove("form_opened");*/
+  document.getElementById("form_div").classList.add("form_closed");
+/*  document.getElementById("form_div").classList.remove("form_opened");*/
 }
 
-function hideDiv(divId){
-	$('#'+divId+'').hide();
+function hideDiv(){
+  document.getElementById("form_div").style.display = "none";
+  //$('#'+divId+'').hide();
+}
+
+function openForm(){
+  document.getElementById("form_div").style.display = "block";
+	//$('form_div').show();
 }
 
 //sending form as a route function
@@ -78,7 +82,7 @@ function plan() {
 	routeFunction(origin_place_id, destination_place_id, travel_mode,
 		directionsService, directionsDisplay);
 
-	setTimeout( hideDiv("form_div"), 4000); 
+	setTimeout( hideDiv(), 4000); 
 	changeHeader("Pick your stops");	
 }
 
@@ -196,7 +200,11 @@ function initMap() {
 	//opening list view
     listview_btn = document.getElementById("listview_btn")
 	listview_btn.addEventListener('click', function(){
-		document.getElementById("listview").style.display = "block";
+		if (document.getElementById("listview").style.display === "none"){
+      document.getElementById("listview").style.display = "block";
+    } else if (document.getElementById("listview").style.display === "block"){
+      document.getElementById("listview").style.display = "none"
+    }
 	});
 	//closing list view
 	map.addListener('click', function(){
@@ -250,13 +258,14 @@ function callback(results, status, pagination) {
 		
     if (status === google.maps.places.PlacesServiceStatus.OK ){
         placesResult = results;
-        if (pagination.hasNextPage) {
+
+        /*if (pagination.hasNextPage) {
           console.log("nextPage pagination");
           pagination.nextPage();
           loader.style.display = "block";
          } else {
           loader.style.display = "none";
-         }
+         }*/
 
          for (var i = 0; i < results.length; i++) {
           createMarker(results[i]);
@@ -266,12 +275,6 @@ function callback(results, status, pagination) {
         //TODO DISPLAY msg
         console.log("zero results");
      }  
-
-
-      
-
-
-
 	 //  loader.style.display = "none";
 
 }
@@ -340,9 +343,11 @@ function createMarker(place) {
     markersArray.push(marker);
     //creating a list view li element for each place
     var ul = document.getElementById("list");
-	var li = document.createElement("li");
-	li.setAttribute("id", markersArray.length-1);
-	li.innerHTML = '<img src="'+photo_url+'"  alt="image" width="150" height="150"> <p class="place_name">' + place.name + '</p> ';
+  	var li = document.createElement("li");
+
+  	li.setAttribute("id", markersArray.length-1);
+
+  	li.innerHTML = '<img src="'+photo_url+'"  alt="image" width="150" height="150"> <p class="place_name">' + place.name + '</p> ';
     ul.appendChild(li);
     
     //listener on li
@@ -368,8 +373,8 @@ function createMarker(place) {
        iw_paraghraph.innerHTML += place.vicinity;
        iw_paraghraph.innerHTML += "<br>Types: " + place_types;
        iw_paraghraph.innerHTML += "<br> Rating " + place.rating;
-       iw_paraghraph.innerHTML += "<br>Price level " + place.price_level;
-       iw_paraghraph.innerHTML += "<br>Website " + place.website;
+      /* iw_paraghraph.innerHTML += "<br>Price level " + place.price_level;
+       iw_paraghraph.innerHTML += "<br>Website " + place.website;*/
        iw_image.innerHTML = '<img src="'+photo_url+'" class="img-thumbnail" alt="image" width="100" height="100"> ';
        //adding to the route as a waypoint
         if (addToRouteBtn){
@@ -419,10 +424,9 @@ function addToRoute(place) {
 };  // if add to route end
 
 
-function secondsToHms(d) {
-  d = Number(d);
-  var h = Math.floor(d / 3600);
-  var m = Math.floor(d % 3600 / 60);
- // var s = Math.floor(d % 3600 % 60);
-  return ((h > 0 ? h + ":" + (m < 10 ? "0" : "") : "") + m  ); 
-}
+function secondsToHms(SECONDS) {
+    var date = new Date(null);
+    date.setSeconds(SECONDS); // specify value for SECONDS here
+    var result = date.toISOString().substr(11, 8);
+    return result;
+ } 

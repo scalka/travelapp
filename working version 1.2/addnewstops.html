@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmvKzk82JZpR7vwlV4N3hLRizQ4SvEeCU&callback=initMap">
+    </script>
+	
+  <div id="map" height="460px" width="100%"></div>
+    <title>Router</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+
+    <!--     <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script> -->
+    <script type="text/javascript" src="js/javascript.js"></script>
+ 
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmvKzk82JZpR7vwlV4N3hLRizQ4SvEeCU&callback=initMap">
+    </script>
+  </head>
+  <body >
+  <nav class="navbar navbar-inverse navbar-static-top custom-navbar " role="navigation" id="nav">
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="index.html">Start</a>
+      <a href="addnewstops.html">Add new stop</a>
+    </div>
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+  </nav>
+<script>
+      var map;
+      var marker;
+      var infowindow;
+      var messagewindow;
+
+      function initMap() {
+        var dublin = {lat: 53.3450, lng: -6.2653};
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: dublin,
+          zoom: 13
+        });
+
+        infowindow = new google.maps.InfoWindow({
+          content: document.getElementById('form')
+        })
+
+        messagewindow = new google.maps.InfoWindow({
+          content: document.getElementById('message')
+        });
+		
+        google.maps.event.addListener(map, 'click', function(event) {
+          marker = new google.maps.Marker({
+            position: event.latLng,
+            map: map
+          });
+
+
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map, marker);
+          });
+        });
+      }
+
+      function saveData() {
+        var name = escape(document.getElementById('name').value);
+        var address = escape(document.getElementById('address').value);
+        var type = document.getElementById('type').value;
+        var latlng = marker.getPosition();
+        var url = "phpsqlinfo_addrow.php?name=" + name + "&address=" + address +
+            "&type=" + type + "&lat=" + latlng.lat() + "&lng=" + latlng.lng();
+
+        downloadUrl(url, function(data, responseCode) {
+
+          if (responseCode == 200 ) {
+            infowindow.close();
+            messagewindow.open(map, marker);
+          }
+        });
+      }
+
+      function downloadUrl(url, callback) {
+        var request = window.ActiveXObject ?
+            new ActiveXObject('Microsoft.XMLHTTP') :
+            new XMLHttpRequest;
+
+        request.onreadystatechange = function() {
+          if (request.readyState == 4) {
+            request.onreadystatechange = doNothing;
+            callback(request.responseText, request.status);
+          }
+        };
+
+        request.open('GET', url, true);
+        request.send(null);
+      }
+
+      function doNothing () {
+      }
+
+    </script>
+	<div id="form">
+      <table>
+      <tr><td>Name:</td> <td><input type='text' id='name'/> </td> </tr>
+      <tr><td>Address:</td> <td><input type='text' id='address'/> </td> </tr>
+      <tr><td>Type:</td> <td><select id='type'> +
+                 <option value='bar' SELECTED>bar</option>
+                 <option value='restaurant'>restaurant</option>
+				 <option value='restaurant'>entertainment</option>
+				 <option value='restaurant'>sight</option>
+				 <option value='restaurant'>shopping</option>
+				 <option value='restaurant'>attraction</option>
+                 </select> </td></tr>
+                 <tr><td></td><td><input type='button' value='Save' onclick='saveData()'/></td></tr>
+      </table>
+    </div>
+    <div id="message">Location saved</div>
+
+  </body>
+</html>
+
